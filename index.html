@@ -20,8 +20,7 @@
     </script>
 
     <!-- Forminit SDK -->
-    <script src="https://forminit.com/sdk/v1/forminit.js">
-    </script>
+    <script src="https://forminit.com/sdk/v1/forminit.js"></script>
 
     <style>
         /* ===== BASES ===== */
@@ -75,6 +74,7 @@
                 opacity: 0;
                 transform: translateY(40px) scale(0.95);
             }
+
             to {
                 opacity: 1;
                 transform: translateY(0) scale(1);
@@ -2155,7 +2155,7 @@
         <!-- شريط التصنيفات -->
         <nav class="categories-bar" id="categoriesBar">
             <a href="#" class="active" data-category="all" onclick="filterProducts('all')">الكل</a>
-           
+
             <a href="#" data-category="موازين" onclick="filterProducts('موازين')"> 📏 موازين </a>
         </nav>
 
@@ -2249,7 +2249,7 @@
                     <div class="checkout-box">
                         <!-- ===== نموذج Forminit ===== -->
                         <div class="forminit-contact-section">
-                            <form id="contactForm">
+                            <form id="contactForm" enctype="multipart/form-data">
                                 <div class="form-grid">
                                     <input type="text" name="fi-sender-firstName" placeholder="الاسم الأول" required>
                                     <input type="text" name="fi-sender-lastName" placeholder="الاسم الأخير" required>
@@ -2281,7 +2281,8 @@
                     <div style="text-align: center; margin-bottom: 25px;">
                         <img src="https://g.top4top.io/p_3889jf2jz1.png" alt="Takamul Store"
                             style="width: 100px; height: 100px; border-radius: 50%; object-fit: contain; background: #fff; padding: 10px; border: 3px solid #ff9900;">
-                        <h2 style="color: #111; margin-top: 15px;">🛍️ <span style="color: #ff9900;">Takamul</span> Store
+                        <h2 style="color: #111; margin-top: 15px;">🛍️ <span style="color: #ff9900;">Takamul</span>
+                            Store
                         </h2>
                         <p style="color: #666; font-size: 14px;">متجرك الأول للملابس والترنجات في مصر</p>
                     </div>
@@ -2375,19 +2376,57 @@
     <!-- ============================================================ -->
     <script>
         // ============================================================
+        // 0. إصلاح مشكلة file:// protocol
+        // ============================================================
+        (function fixFirebaseEnvironment() {
+            if (window.location.protocol === 'file:') {
+                console.warn('⚠️ تشغيل محلي - محاكاة بيئة آمنة');
+
+                if (typeof localStorage === 'undefined') {
+                    window.localStorage = {
+                        _data: {},
+                        setItem: function (id, val) { this._data[id] = String(val); },
+                        getItem: function (id) { return this._data[id] || null; },
+                        removeItem: function (id) { delete this._data[id]; },
+                        clear: function () { this._data = {}; }
+                    };
+                }
+
+                if (!window.isSecureContext) {
+                    try {
+                        Object.defineProperty(window, 'isSecureContext', {
+                            value: true,
+                            writable: false,
+                            configurable: false
+                        });
+                    } catch (e) { }
+                }
+
+                setTimeout(() => {
+                    const notif = document.getElementById('notification');
+                    if (notif) {
+                        notif.textContent = '⚠️ للتشغيل الأمثل، استخدم Live Server (HTTP)';
+                        notif.className = 'notification error';
+                        notif.classList.add('show');
+                        setTimeout(() => notif.classList.remove('show'), 6000);
+                    }
+                }, 1000);
+            }
+        })();
+
+        // ============================================================
         // 1. تهيئة Firebase
         // ============================================================
         const firebaseConfig = {
-            apiKey: "AIzaSyDenPZuzh0U-7XZ1gAiiHDqit7SKCV276M",
-            authDomain: "takamul-store.firebaseapp.com",
-            projectId: "takamul-store",
-            storageBucket: "takamul-store.firebasestorage.app",
-            messagingSenderId: "272519712873",
-            appId: "1:272519712873:web:047f9baece0d153339d2f8",
-            measurementId: "G-M00WWV0FEH"
+            apiKey: "AIzaSyCvB8r9dna0SCZXoNW4M0wacS50dNDWETQ",
+            authDomain: "takamul-c419c.firebaseapp.com",
+            projectId: "takamul-c419c",
+            storageBucket: "takamul-c419c.firebasestorage.app",
+            messagingSenderId: "169228140962",
+            appId: "1:169228140962:web:1bceb52f2a36326111b2fb",
+            measurementId: "G-M37JENVES1"
         };
 
-        // تهيئة التطبيق (الطريقة compat)
         firebase.initializeApp(firebaseConfig);
         const auth = firebase.auth();
         console.log('✅ Firebase initialized!');
@@ -2403,131 +2442,61 @@
         emailjs.init({
             publicKey: PUBLIC_KEY,
         });
-        console.log('✅ EmailJS initialized with public key:', PUBLIC_KEY);
+        console.log('✅ EmailJS initialized');
 
         // ============================================================
-        // 3. تهيئة Forminit
+        // 3. تهيئة Forminit (تم التعديل هنا)
         // ============================================================
         const forminit = new Forminit();
-        const FORM_ID = 'fcrwehkfyjg';
+        const FORM_ID = "c1wnaskf0a1"; // ✅ المعرف الجديد
+        const REDIRECT_URL = "https://hivemind.com/thank-you"; // ✅ رابط التحويل الجديد
         console.log('✅ Forminit initialized with FORM_ID:', FORM_ID);
 
         // ============================================================
-        // 4. بيانات المنتجات - 30 منتج مع صور صحيحة
+        // 4. بيانات المنتجات
         // ============================================================
         const allProducts = [
-            // ===== ترنجات (تيشيرتات) - 10 منتجات =====
             {
-                id: 1,
-                name:"ميزان ",
-                price: 350,
-                oldPrice: 500,
-                discount: "30%",
-                category: "موازين",
-                rating: 4.8,
-                reviews: 156,
-                image: "https://i.imgpeek.com/twVvQc2mPyyn",
-                freeShipping: true,
+                id: 1, name: "ميزان رقمي", price: 350, oldPrice: 500, discount: "30%", category: "موازين", rating: 4.8, reviews: 156,
+                image: "https://i.imgpeek.com/twVvQc2mPyyn", freeShipping: true,
                 description: "ميزان رقمي عالي الدقة، مثالي لقياس الوزن بدقة وسهولة.",
-                brand: "Takamul",
-                material: "حديد مقاوم للصدء",
-                warranty: "ضمان 30 يوم"
+                brand: "Takamul", material: "حديد مقاوم للصدء", warranty: "ضمان 30 يوم"
             },
             {
-                id: 2,
-                name:"ميزان ",
-                price: 350,
-                oldPrice: 500,
-                discount: "30%",
-                category: "موازين",
-                rating: 4.8,
-                reviews: 156,
-                image: "https://i.imgpeek.com/twVvQc2mPyyn",
-                freeShipping: true,
-                description: "ميزان رقمي عالي الدقة، مثالي لقياس الوزن بدقة وسهولة.",
-                brand: "Takamul",
-                material: "حديد مقاوم للصدء",
-                warranty: "ضمان 30 يوم"
+                id: 2, name: "ميزان مطبخ", price: 280, oldPrice: 400, discount: "30%", category: "موازين", rating: 4.5, reviews: 89,
+                image: "https://i.imgpeek.com/Wc9yilIVuO3-", freeShipping: true,
+                description: "ميزان مطبخ دقيق لوزن المكونات.",
+                brand: "Takamul", material: "بلاستيك متين", warranty: "ضمان 30 يوم"
             },
             {
-                id: 3,
-                name:"ميزان ",
-                price: 350,
-                oldPrice: 500,
-                discount: "30%",
-                category: "موازين",
-                rating: 4.8,
-                reviews: 156,
-                image: "https://i.imgpeek.com/twVvQc2mPyyn",
-                freeShipping: true,
-                description: "ميزان رقمي عالي الدقة، مثالي لقياس الوزن بدقة وسهولة.",
-                brand: "Takamul",
-                material: "حديد مقاوم للصدء",
-                warranty: "ضمان 30 يوم"
+                id: 3, name: "ميزان حمام", price: 450, oldPrice: 600, discount: "25%", category: "موازين", rating: 4.9, reviews: 210,
+                image: "https://i.imgpeek.com/rXBBHnwsJQTs", freeShipping: true,
+                description: "ميزان حمام ذكي يقيس الوزن ونسبة الدهون.",
+                brand: "Takamul", material: "زجاج مقوى", warranty: "ضمان 30 يوم"
             },
             {
-                id: 4,
-                name:"ميزان ",
-                price: 350,
-                oldPrice: 500,
-                discount: "30%",
-                category: "موازين",
-                rating: 4.8,
-                reviews: 156,
-                image: "https://i.imgpeek.com/twVvQc2mPyyn",
-                freeShipping: true,
-                description: "ميزان رقمي عالي الدقة، مثالي لقياس الوزن بدقة وسهولة.",
-                brand: "Takamul",
-                material: "حديد مقاوم للصدء",
-                warranty: "ضمان 30 يوم"
+                id: 4, name: "ميزان ذكي", price: 550, oldPrice: 750, discount: "27%", category: "موازين", rating: 4.7, reviews: 134,
+                image: "https://i.imgpeek.com/60uk1BBcpEfk", freeShipping: true,
+                description: "ميزان ذكي متصل بالهاتف لتحليل الوزن.",
+                brand: "Takamul", material: "زجاج + بلاستيك", warranty: "ضمان 30 يوم"
             },
             {
-                id: 5,
-                name:"ميزان ",
-                price: 350,
-                oldPrice: 500,
-                discount: "30%",
-                category: "موازين",
-                rating: 4.8,
-                reviews: 156,
-                image: "https://i.imgpeek.com/twVvQc2mPyyn",
-                freeShipping: true,
-                description: "ميزان رقمي عالي الدقة، مثالي لقياس الوزن بدقة وسهولة.",
-                brand: "Takamul",
-                material: "حديد مقاوم للصدء",
-                warranty: "ضمان 30 يوم"
+                id: 5, name: "ميزان يدوي", price: 180, oldPrice: 250, discount: "28%", category: "موازين", rating: 4.3, reviews: 67,
+                image: "https://i.imgpeek.com/vB9CiHukXvlB", freeShipping: false,
+                description: "ميزان يدوي صغير محمول.",
+                brand: "Takamul", material: "بلاستيك", warranty: "ضمان 30 يوم"
             },
             {
-                id: 6,
-                name:"ميزان ",
-                price: 350,
-                oldPrice: 500,
-                discount: "30%",
-                category: "موازين",
-                rating: 4.8,
-                reviews: 156,
-                image: "https://i.imgpeek.com/twVvQc2mPyyn",
-                freeShipping: true,
-                description: "ميزان رقمي عالي الدقة، مثالي لقياس الوزن بدقة وسهولة.",
-                brand: "Takamul",
-                material: "حديد مقاوم للصدء",
-                warranty: "ضمان 30 يوم"
+                id: 6, name: "ميزان صناعي", price: 1200, oldPrice: 1600, discount: "25%", category: "موازين", rating: 4.9, reviews: 45,
+                image: "https://i.imgpeek.com/pB3IWDi_jyP8", freeShipping: false,
+                description: "ميزان صناعي للاستخدام في المصانع والمستودعات.",
+                brand: "Takamul", material: "حديد صلب", warranty: "ضمان 30 يوم"
             },
             {
-               id: 7,
-                name:"ميزان ",
-                price: 350,
-                oldPrice: 500,
-                discount: "30%",
-                category: "موازين",
-                rating: 4.8,
-                reviews: 156,
-                image: "https://i.imgpeek.com/twVvQc2mPyyn",
-                freeShipping: true,
-                description: "ميزان رقمي عالي الدقة، مثالي لقياس الوزن بدقة وسهولة.",
-                brand: "Takamul",
-                material: "حديد مقاوم للصدء",
-                warranty: "ضمان 30 يوم"
+                id: 7, name: "ميزان طبي", price: 850, oldPrice: 1100, discount: "23%", category: "موازين", rating: 4.8, reviews: 98,
+                image: "https://i.imgpeek.com/GrFERblZlUIA", freeShipping: true,
+                description: "ميزان طبي دقيق لقياس الوزن في العيادات.",
+                brand: "Takamul", material: "معادن", warranty: "ضمان 30 يوم"
             }
         ];
 
@@ -2545,7 +2514,7 @@
         let detailSelectedSize = null;
 
         // ============================================================
-        // دوال المصادقة (باستخدام firebase.auth())
+        // دوال المصادقة
         // ============================================================
 
         function handleLogin() {
@@ -2741,9 +2710,6 @@
             }
         }
 
-        // ============================================================
-        // مراقبة حالة المصادقة (الأهم)
-        // ============================================================
         auth.onAuthStateChanged((user) => {
             const loginScreen = document.getElementById('loginScreen');
             const mainContent = document.getElementById('mainContent');
@@ -2770,9 +2736,6 @@
             }
         });
 
-        // ============================================================
-        // وظائف تبديل الشاشات
-        // ============================================================
         function showRegister() {
             document.getElementById('loginScreen').style.display = 'none';
             document.getElementById('registerScreen').style.display = 'flex';
@@ -2794,8 +2757,9 @@
         }
 
         // ============================================================
-        // مودال من نحن
+        // دوال المتجر
         // ============================================================
+
         function showAboutModal(e) {
             if (e) e.preventDefault();
             document.getElementById('aboutModal').classList.add('open');
@@ -2805,74 +2769,19 @@
             document.getElementById('aboutModal').classList.remove('open');
         }
 
-        document.getElementById('aboutModal')?.addEventListener('click', function(e) {
+        document.getElementById('aboutModal')?.addEventListener('click', function (e) {
             if (e.target === this) closeAboutModal();
         });
 
-        // ============================================================
-        // دوال الموقع
-        // ============================================================
-        function getLocation() {
-            if (!navigator.geolocation) {
-                alert("⚠️ المتصفح لا يدعم خاصية تحديد الموقع!");
-                return;
-            }
-            const locationInput = document.getElementById('clientLocation');
-            locationInput.value = '⏳ جاري جلب الموقع...';
-
-            navigator.geolocation.getCurrentPosition(
-                function(position) {
-                    const lat = position.coords.latitude;
-                    const lng = position.coords.longitude;
-                    fetch(
-                            `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}&zoom=18&addressdetails=1`)
-                        .then(response => response.json())
-                        .then(data => {
-                            locationInput.value = data.display_name || `${lat}, ${lng}`;
-                            showNotification('✅ تم تحديد الموقع بنجاح!');
-                        })
-                        .catch(() => {
-                            locationInput.value = `${lat}, ${lng}`;
-                            showNotification('✅ تم تحديد الموقع');
-                        });
-                },
-                function(error) {
-                    let errorMessage = '⚠️ فشل في جلب الموقع';
-                    if (error.code === 1) errorMessage = '⚠️ المستخدم رفض مشاركة الموقع';
-                    else if (error.code === 2) errorMessage = '⚠️ الموقع غير متوفر حالياً';
-                    else if (error.code === 3) errorMessage = '⚠️ انتهت مهلة جلب الموقع';
-                    locationInput.value = '';
-                    alert(errorMessage + '\nيمكنك كتابة العنوان يدوياً.');
-                }, { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
-            );
-        }
-
-        function openMapPicker() {
-            window.open('https://www.google.com/maps', '_blank');
-            showNotification('🗺️ اختر موقعك على الخريطة ثم انسخ العنوان');
-            const locationInput = document.getElementById('clientLocation');
-            locationInput.placeholder = 'الصق العنوان من الخريطة هنا...';
-            locationInput.value = '';
-            locationInput.focus();
-        }
-
-        // ============================================================
-        // دالة تنظيف الاسم من الأحرف غير المسموح بها
-        // ============================================================
         function cleanName(name) {
             let cleaned = name.replace(/[^a-zA-Z\u0600-\u06FF\s\-'\.]/g, '');
             cleaned = cleaned.replace(/\s+/g, ' ').trim();
             return cleaned || 'غير مدخل';
         }
 
-        // ============================================================
-        // دالة تحويل رقم الهاتف للصيغة الدولية
-        // ============================================================
         function formatPhoneNumber(phone) {
             let cleaned = phone.replace(/[\s\-\(\)]/g, '');
             if (cleaned.startsWith('0')) {
-                cleaned = '+2' + cleaned.substring(1);
-            } else if (cleaned.startsWith('01')) {
                 cleaned = '+2' + cleaned.substring(1);
             } else if (!cleaned.startsWith('+')) {
                 cleaned = '+2' + cleaned;
@@ -2880,45 +2789,33 @@
             return cleaned;
         }
 
-        // ============================================================
-        // تحديث ملخص الطلب في مربع الرسالة
-        // ============================================================
         function updateOrderSummary() {
             const messageTextarea = document.getElementById('orderMessage');
             if (!messageTextarea) return;
-
             if (cart.length === 0) {
                 messageTextarea.value = '🛒 لا توجد منتجات في العربة';
                 return;
             }
-
             let total = 0;
             let totalItems = 0;
             let message = '📋 Order Summary\n';
             message += '━'.repeat(35) + '\n\n';
-
             cart.forEach((item, index) => {
                 const itemTotal = item.price * item.quantity;
                 total += itemTotal;
                 totalItems += item.quantity;
                 message += `${index + 1}. ${item.name}\n`;
-                message +=
-                `   Size: ${item.selectedSize || 'Not specified'} | Qty: ${item.quantity} | Price: ${itemTotal} EGP\n\n`;
+                message += `   Size: ${item.selectedSize || 'Not specified'} | Qty: ${item.quantity} | Price: ${itemTotal} EGP\n\n`;
             });
-
             message += '━'.repeat(35) + '\n';
             message += `📊 Total Items: ${totalItems} piece(s)\n`;
             message += `💰 Total: ${total} EGP\n`;
             message += '\n' + '━'.repeat(35) + '\n';
             message += `📅 Order Date: ${new Date().toLocaleDateString('en-EG')}\n`;
             message += `🕐 Order Time: ${new Date().toLocaleTimeString('en-EG')}`;
-
             messageTextarea.value = message;
         }
 
-        // ============================================================
-        // فتح مودال الدفع مع تحديث الملخص
-        // ============================================================
         function checkout() {
             if (cart.length === 0) {
                 showNotification("⚠️ عربتك فارغة!");
@@ -2929,73 +2826,53 @@
             setTimeout(updateOrderSummary, 200);
         }
 
-        // ============================================================
-        // إغلاق مودال الدفع
-        // ============================================================
         function closeCheckoutModal() {
             document.getElementById('checkoutModal').classList.remove('open');
         }
 
         // ============================================================
-        // إرسال الطلب (EmailJS + Forminit)
+        // الجزء المعدل لحل مشكلة "Form Deleted" - استخدام FormData
         // ============================================================
+        async function sendOrderViaForminit(formData) {
+            try {
+                console.log('📤 إرسال عبر Forminit...');
+                const result = await forminit.submit(FORM_ID, formData, { redirect: REDIRECT_URL });
+                console.log('✅ Forminit response:', result);
+                if (result.error) {
+                    console.error('❌ Forminit error:', result.error);
+                    return { success: false, error: result.error };
+                }
+                return { success: true, data: result };
+            } catch (error) {
+                console.error('❌ Forminit exception:', error);
+                return { success: false, error: error };
+            }
+        }
+
         function sendOrderEmail(name, email, phone, location, total, productsList, totalItems) {
-            const message = `
-        🛍️ طلب جديد من متجر Aviro Store!
-
-        👤 اسم العميل: ${name}
-        📱 رقم الهاتف: ${phone}
-        📍 العنوان: ${location}
-        ✉️ البريد الإلكتروني: ${email}
-
-        📦 تفاصيل المنتجات:
-        ${productsList}
-
-        📊 ملخص الطلب:
-        • عدد القطع: ${totalItems} قطعة
-        • الإجمالي: ${total} ج.م
-
-        📅 تاريخ الطلب: ${new Date().toLocaleDateString('ar-EG')}
-        🕐 وقت الطلب: ${new Date().toLocaleTimeString('ar-EG')}
-
-        ---
-        📧 تم الإرسال تلقائياً من متجر Aviro Store
-        🌐 avirostore10@gmail.com
-        `;
+            const message = `🛍️ طلب جديد من متجر Takamul Store!\n\n👤 اسم العميل: ${name}\n📱 رقم الهاتف: ${phone}\n📍 العنوان: ${location}\n✉️ البريد الإلكتروني: ${email}\n\n📦 تفاصيل المنتجات:\n${productsList}\n\n📊 ملخص الطلب:\n• عدد القطع: ${totalItems} قطعة\n• الإجمالي: ${total} ج.م\n\n📅 تاريخ الطلب: ${new Date().toLocaleDateString('ar-EG')}\n🕐 وقت الطلب: ${new Date().toLocaleTimeString('ar-EG')}\n\n---\n📧 تم الإرسال تلقائياً من متجر Takamul Store\n🌐 takamulis26@gmail.com`;
 
             const templateParams = {
-                to_email: STORE_EMAIL,
-                from_name: name,
-                from_email: email,
-                message: message,
-                subject: "🛍️ طلب جديد من متجر Aviro Store",
-                phone: phone,
-                location: location,
-                total: total + " ج.م",
-                store_name: "Aviro Store",
-                year: new Date().getFullYear()
+                to_email: STORE_EMAIL, from_name: name, from_email: email, message: message,
+                subject: "🛍️ طلب جديد من متجر Takamul Store", phone: phone, location: location,
+                total: total + " ج.م", store_name: "Takamul Store", year: new Date().getFullYear()
             };
-
             return emailjs.send(SERVICE_ID, TEMPLATE_ID, templateParams);
         }
 
         function sendOrder() {
-            let firstName = document.querySelector('input[name="fi-sender-firstName"]').value.trim();
-            let lastName = document.querySelector('input[name="fi-sender-lastName"]').value.trim();
-            const phone = document.querySelector('input[name="fi-sender-phone"]').value.trim();
-            const address = document.querySelector('input[name="fi-sender-address"]').value.trim();
-            const email = document.querySelector('input[name="fi-sender-email"]').value.trim();
-
-            const locationInput = document.getElementById('clientLocation')?.value.trim() || '';
+            let firstName = document.querySelector('input[name="fi-sender-firstName"]')?.value.trim() || '';
+            let lastName = document.querySelector('input[name="fi-sender-lastName"]')?.value.trim() || '';
+            const phone = document.querySelector('input[name="fi-sender-phone"]')?.value.trim() || '';
+            const address = document.querySelector('input[name="fi-sender-address"]')?.value.trim() || '';
+            const email = document.querySelector('input[name="fi-sender-email"]')?.value.trim() || '';
 
             firstName = cleanName(firstName);
             lastName = cleanName(lastName);
 
-            const finalFirstName = firstName || 'غير مدخل';
-            const finalLastName = lastName || '';
-            const finalName = `${finalFirstName} ${finalLastName}`.trim() || 'غير مدخل';
+            const finalName = `${firstName} ${lastName}`.trim() || 'غير مدخل';
             const finalPhone = formatPhoneNumber(phone || '');
-            const finalAddress = address || locationInput || 'غير مدخل';
+            const finalAddress = address || 'غير مدخل';
             const finalEmail = email || 'غير مدخل';
 
             if (!firstName || !lastName || !finalPhone || !finalAddress) {
@@ -3008,18 +2885,6 @@
                 return;
             }
 
-            let total = 0;
-            let totalItems = 0;
-            let productsList = '';
-
-            cart.forEach((item, index) => {
-                const itemTotal = item.price * item.quantity;
-                total += itemTotal;
-                totalItems += item.quantity;
-                productsList +=
-                    `${index + 1}. ${item.name} | مقاس: ${item.selectedSize} | الكمية: ${item.quantity} | السعر: ${itemTotal} ج.م\n`;
-            });
-
             if (cart.length === 0) {
                 alert("⚠️ عربتك فارغة!");
                 return;
@@ -3027,311 +2892,103 @@
 
             showNotification('📧 جاري إرسال الطلب...');
 
-            const orderData = {
-                blocks: [{
-                    type: 'sender',
-                    properties: {
-                        firstName: finalFirstName,
-                        lastName: finalLastName,
-                        email: finalEmail,
-                        phone: finalPhone
-                    }
-                }, {
-                    type: 'text',
-                    name: 'order_details',
-                    value: `🛍️ طلب جديد من متجر Aviro Store!
+            // ===== إنشاء FormData بالطريقة الرسمية =====
+            const formData = new FormData();
+            formData.append('fi-sender-firstName', firstName);
+            formData.append('fi-sender-lastName', lastName);
+            formData.append('fi-sender-phone', finalPhone);
+            formData.append('fi-sender-address', finalAddress);
+            formData.append('fi-sender-email', finalEmail);
+            formData.append('fi-text-message', document.getElementById('orderMessage')?.value || '');
 
-            👤 اسم العميل: ${finalName}
-            📱 رقم الهاتف: ${finalPhone}
-            📍 العنوان: ${finalAddress}
-            ✉️ البريد الإلكتروني: ${finalEmail}
-
-            📦 تفاصيل الطلب:
-            ${productsList}
-
-            📊 ملخص الطلب:
-            • عدد القطع: ${totalItems} قطعة
-            • الإجمالي: ${total} ج.م
-
-            📅 تاريخ الطلب: ${new Date().toLocaleDateString('ar-EG')}
-            🕐 وقت الطلب: ${new Date().toLocaleTimeString('ar-EG')}`
-                }, {
-                    type: 'text',
-                    name: 'customer_name',
-                    value: finalName
-                }, {
-                    type: 'text',
-                    name: 'customer_phone',
-                    value: finalPhone
-                }, {
-                    type: 'text',
-                    name: 'customer_address',
-                    value: finalAddress
-                }, {
-                    type: 'text',
-                    name: 'customer_email',
-                    value: finalEmail
-                }, {
-                    type: 'text',
-                    name: 'total_items',
-                    value: totalItems + ' قطعة'
-                }, {
-                    type: 'text',
-                    name: 'total_price',
-                    value: total + ' ج.م'
-                }, {
-                    type: 'text',
-                    name: 'products_list',
-                    value: productsList
-                }]
-            };
-
-            console.log('📤 إرسال عبر Forminit:', orderData);
-
-            forminit.submit(FORM_ID, orderData)
+            // ===== إرسال عبر Forminit (حل المشكلة) =====
+            sendOrderViaForminit(formData)
                 .then((result) => {
-                    console.log('✅ Forminit response:', result);
-                    if (result.error) {
-                        console.warn('⚠️ Forminit error:', result.error);
-                        showNotification('❌ فشل إرسال الطلب: ' + result.error.message, 'error');
-                        return;
+                    if (result.success) {
+                        showNotification('✅ تم إرسال الطلب بنجاح!', 'success');
+                        cart = [];
+                        localStorage.setItem("cart", JSON.stringify(cart));
+                        updateCartIconCount();
+                        renderCart();
+                        setTimeout(() => {
+                            closeCheckoutModal();
+                            document.querySelectorAll('#checkoutModal input, #checkoutModal textarea').forEach(el => {
+                                el.value = '';
+                            });
+                        }, 2000);
+                    } else {
+                        showNotification('❌ فشل إرسال الطلب: ' + (result.error?.message || 'خطأ غير معروف'), 'error');
                     }
-                    showNotification('✅ تم إرسال الطلب عبر Forminit بنجاح!', 'success');
                 })
                 .catch((error) => {
-                    console.warn('⚠️ Forminit catch:', error);
-                    showNotification('⚠️ فشل الإرسال عبر Forminit', 'error');
+                    console.error('❌ Error in sendOrder:', error);
+                    showNotification('⚠️ حدث خطأ غير متوقع', 'error');
                 });
+
+            // ===== إرسال عبر EmailJS (نسخة احتياطية) =====
+            let total = 0, totalItems = 0, productsList = '';
+            cart.forEach((item, index) => {
+                const itemTotal = item.price * item.quantity;
+                total += itemTotal; totalItems += item.quantity;
+                productsList += `${index + 1}. ${item.name} | مقاس: ${item.selectedSize || 'غير محدد'} | الكمية: ${item.quantity} | السعر: ${itemTotal} ج.م\n`;
+            });
 
             sendOrderEmail(finalName, finalEmail, finalPhone, finalAddress, total, productsList, totalItems)
-                .then(() => {
-                    showNotification('✅ تم إرسال الطلب بنجاح! سيتم التواصل معك قريباً.', 'success');
-                    cart = [];
-                    localStorage.setItem("cart", JSON.stringify(cart));
-                    updateCartIconCount();
-                    renderCart();
-                    setTimeout(() => {
-                        closeCheckoutModal();
-                        document.querySelectorAll('#checkoutModal input, #checkoutModal textarea').forEach(el => {
-                            el.value = '';
-                        });
-                    }, 2000);
-                })
-                .catch((error) => {
-                    console.error('❌ EmailJS error:', error);
-                    showNotification('⚠️ تم إرسال الطلب عبر النظام البديل');
-                });
+                .then(() => console.log('✅ EmailJS sent successfully'))
+                .catch((error) => console.error('❌ EmailJS error:', error));
         }
 
         // ============================================================
-        // وظائف المنتجات والسلة
+        // دوال عرض المنتجات
         // ============================================================
         function displayProducts(productsToDisplay) {
             const container = document.getElementById('productsContainer');
             const spinner = document.getElementById('loadingSpinner');
             if (!container) return;
-
             spinner.classList.add('show');
             container.innerHTML = '';
-
             setTimeout(() => {
                 spinner.classList.remove('show');
-
                 if (!productsToDisplay || productsToDisplay.length === 0) {
-                    container.innerHTML = `
-                                <div style="grid-column:1/-1; text-align:center; padding:80px 20px; color:#888;">
-                                    <span style="font-size:60px; display:block; margin-bottom:20px;">🔍</span>
-                                    <h2 style="font-size:28px; margin-bottom:10px; color:#111;">لا توجد منتجات</h2>
-                                    <p>حاول تغيير كلمة البحث أو التصنيف</p>
-                                </div>
-                            `;
+                    container.innerHTML = `<div style="grid-column:1/-1; text-align:center; padding:80px 20px; color:#888;"><span style="font-size:60px; display:block; margin-bottom:20px;">🔍</span><h2 style="font-size:28px; margin-bottom:10px; color:#111;">لا توجد منتجات</h2><p>حاول تغيير كلمة البحث أو التصنيف</p></div>`;
                     return;
                 }
-
                 productsToDisplay.forEach(product => {
-                    const is360 = product.images360 && product.images360.length > 0;
-                    let imageHTML = '';
-                    if (is360) {
-                        imageHTML = `
-                                    <div class="image-360-container" 
-                                         id="container-${product.id}"
-                                         onmousedown="startDrag(event, ${product.id})"
-                                         onmousemove="dragRotate(event, ${product.id})"
-                                         onmouseup="endDrag()"
-                                         onmouseleave="endDrag()"
-                                         ontouchstart="startDragTouch(event, ${product.id})"
-                                         ontouchmove="dragRotateTouch(event, ${product.id})"
-                                         ontouchend="endDrag()">
-                                        <img id="img-${product.id}" src="${product.images360[0]}" alt="${product.name}">
-                                        <span class="badge-360">🔄 360°</span>
-                                    </div>
-                                `;
-                        currentImageIndex[product.id] = 0;
-                    } else {
-                        imageHTML =
-                            `<div class="product-image-wrapper"><img src="${product.image}" alt="${product.name}"></div>`;
-                    }
-
+                    const imageHTML = `<div class="product-image-wrapper"><img src="${product.image}" alt="${product.name}"></div>`;
                     const stars = '⭐'.repeat(Math.floor(product.rating)) + (product.rating % 1 >= 0.5 ? '⭐' : '');
-
-                    const discountPercent = product.discount ?
-                        `<span class="discount-badge">${product.discount}</span>` : '';
-                    const freeShipping = product.freeShipping ?
-                        `<span class="free-shipping">🚚 التوصيل على حسب المحافظه </span>` : '';
-
+                    const discountPercent = product.discount ? `<span class="discount-badge">${product.discount}</span>` : '';
+                    const freeShipping = product.freeShipping ? `<span class="free-shipping">🚚 التوصيل على حسب المحافظه </span>` : '';
                     container.innerHTML += `
-                                <div class="product-card" onclick="openProductDetails(${product.id})">
-                                    ${imageHTML}
-                                    ${discountPercent}
-                                    <div class="product-info">
-                                        <h3>${product.name}</h3>
-                                        <div class="rating">
-                                            <span class="stars">${stars}</span>
-                                            <span class="count">(${product.reviews || 0})</span>
-                                        </div>
-                                        <div class="price-container">
-                                            <span class="current-price">${product.price} ج.م</span>
-                                            ${product.oldPrice ? `<span class="old-price">${product.oldPrice} ج.م</span>` : ''}
-                                            ${product.discount ? `<span class="discount-percent">${product.discount}</span>` : ''}
-                                        </div>
-                                        ${freeShipping}
-                                        <button class="add-to-cart-btn" onclick="event.stopPropagation(); addToCart(${product.id})">
-                                            🛒 إضافة إلى العربة
-                                        </button>
-                                    </div>
-                                </div>
-                            `;
-                });
-
-                productsToDisplay.forEach(product => {
-                    if (product.images360 && product.images360.length > 0) {
-                        setTimeout(() => startAutoRotate(product.id), 500);
-                    }
+                        <div class="product-card" onclick="openProductDetails(${product.id})">
+                            ${imageHTML} ${discountPercent}
+                            <div class="product-info">
+                                <h3>${product.name}</h3>
+                                <div class="rating"><span class="stars">${stars}</span><span class="count">(${product.reviews || 0})</span></div>
+                                <div class="price-container"><span class="current-price">${product.price} ج.م</span>${product.oldPrice ? `<span class="old-price">${product.oldPrice} ج.م</span>` : ''}${product.discount ? `<span class="discount-percent">${product.discount}</span>` : ''}</div>
+                                ${freeShipping}
+                                <button class="add-to-cart-btn" onclick="event.stopPropagation(); addToCart(${product.id})">🛒 إضافة إلى العربة</button>
+                            </div>
+                        </div>`;
                 });
             }, 300);
         }
 
         function filterProducts(category) {
             currentCategory = category;
-
-            document.querySelectorAll('#categoriesBar a').forEach(el => {
-                el.classList.remove('active');
-                if (el.dataset.category === category) {
-                    el.classList.add('active');
-                }
-            });
-
+            document.querySelectorAll('#categoriesBar a').forEach(el => { el.classList.remove('active'); if (el.dataset.category === category) el.classList.add('active'); });
             const searchInput = document.getElementById('searchInput').value.trim().toLowerCase();
             let filtered = allProducts;
-
-            if (category !== 'all') {
-                filtered = filtered.filter(p => p.category === category);
-            }
-
-            if (searchInput) {
-                filtered = filtered.filter(p => p.name.toLowerCase().includes(searchInput));
-            }
-
+            if (category !== 'all') filtered = filtered.filter(p => p.category === category);
+            if (searchInput) filtered = filtered.filter(p => p.name.toLowerCase().includes(searchInput));
             displayProducts(filtered);
         }
 
         function searchProducts() {
             const searchInput = document.getElementById('searchInput').value.trim().toLowerCase();
             let filtered = allProducts;
-
-            if (currentCategory !== 'all') {
-                filtered = filtered.filter(p => p.category === currentCategory);
-            }
-
-            if (searchInput) {
-                filtered = filtered.filter(p => p.name.toLowerCase().includes(searchInput));
-            }
-
+            if (currentCategory !== 'all') filtered = filtered.filter(p => p.category === currentCategory);
+            if (searchInput) filtered = filtered.filter(p => p.name.toLowerCase().includes(searchInput));
             displayProducts(filtered);
-        }
-
-        function selectSize(productId, size) {
-            selectedSizes[productId] = size;
-            const container = document.getElementById(`sizeContainer-${productId}`);
-            if (container) {
-                container.querySelectorAll('.size-btn').forEach(btn => {
-                    btn.classList.remove('selected');
-                    if (btn.textContent.trim() === size) btn.classList.add('selected');
-                });
-            }
-            const product = allProducts.find(p => p.id === productId);
-            if (product) showNotification(`✅ تم اختيار المقاس ${size} لمنتج "${product.name}"`);
-        }
-
-        function startDrag(e, id) {
-            isDragging = true;
-            dragStartX = e.clientX;
-            stopAutoRotate(id);
-        }
-
-        function startDragTouch(e, id) {
-            const touch = e.touches[0];
-            isDragging = true;
-            dragStartX = touch.clientX;
-            stopAutoRotate(id);
-        }
-
-        function dragRotate(e, id) {
-            if (!isDragging) return;
-            const product = allProducts.find(p => p.id === id);
-            if (!product || !product.images360) return;
-            const deltaX = e.clientX - dragStartX;
-            if (Math.abs(deltaX) > 10) {
-                const direction = deltaX > 0 ? 1 : -1;
-                const img = document.getElementById(`img-${id}`);
-                if (!img) return;
-                const totalImages = product.images360.length;
-                currentImageIndex[id] = (currentImageIndex[id] + direction + totalImages) % totalImages;
-                img.src = product.images360[currentImageIndex[id]];
-                dragStartX = e.clientX;
-            }
-        }
-
-        function dragRotateTouch(e, id) {
-            if (!isDragging) return;
-            const touch = e.touches[0];
-            const product = allProducts.find(p => p.id === id);
-            if (!product || !product.images360) return;
-            const deltaX = touch.clientX - dragStartX;
-            if (Math.abs(deltaX) > 10) {
-                const direction = deltaX > 0 ? 1 : -1;
-                const img = document.getElementById(`img-${id}`);
-                if (!img) return;
-                const totalImages = product.images360.length;
-                currentImageIndex[id] = (currentImageIndex[id] + direction + totalImages) % totalImages;
-                img.src = product.images360[currentImageIndex[id]];
-                dragStartX = touch.clientX;
-            }
-        }
-
-        function endDrag() { isDragging = false; }
-
-        function startAutoRotate(id) {
-            const product = allProducts.find(p => p.id === id);
-            if (!product || !product.images360) return;
-            const img = document.getElementById(`img-${id}`);
-            if (!img) return;
-            if (autoRotateIntervals[id]) clearInterval(autoRotateIntervals[id]);
-            let index = currentImageIndex[id] || 0;
-            autoRotateIntervals[id] = setInterval(() => {
-                if (!isDragging) {
-                    index = (index + 1) % product.images360.length;
-                    img.src = product.images360[index];
-                    currentImageIndex[id] = index;
-                }
-            }, 200);
-        }
-
-        function stopAutoRotate(id) {
-            if (autoRotateIntervals[id]) {
-                clearInterval(autoRotateIntervals[id]);
-                delete autoRotateIntervals[id];
-            }
         }
 
         function toggleCart() {
@@ -3346,20 +3003,11 @@
         function addToCart(id) {
             const product = allProducts.find(p => p.id === id);
             if (!product) return;
-            const selectedSize = selectedSizes[id];
-            if (product.sizes && product.sizes.length > 0 && !selectedSize) {
-                showNotification(`⚠️ يرجى اختيار مقاس لمنتج "${product.name}"`);
-                return;
-            }
-            const existingIndex = cart.findIndex(item => item.id === id && item.selectedSize === selectedSize);
+            const existingIndex = cart.findIndex(item => item.id === id);
             if (existingIndex !== -1) {
                 cart[existingIndex].quantity++;
             } else {
-                cart.push({
-                    ...product,
-                    quantity: 1,
-                    selectedSize: selectedSize || 'غير محدد'
-                });
+                cart.push({ ...product, quantity: 1, selectedSize: 'غير محدد' });
             }
             localStorage.setItem("cart", JSON.stringify(cart));
             updateCartIconCount();
@@ -3377,41 +3025,35 @@
             const cartItems = document.getElementById("cartItems");
             const cartTotal = document.getElementById("cartTotal");
             if (!cartItems) return;
-
             if (cart.length === 0) {
-                cartItems.innerHTML =
-                    `<div class="empty-cart-msg"><span class="icon">🛒</span><p>لا توجد منتجات في العربة</p></div>`;
+                cartItems.innerHTML = `<div class="empty-cart-msg"><span class="icon">🛒</span><p>لا توجد منتجات في العربة</p></div>`;
                 if (cartTotal) cartTotal.innerText = '0';
                 return;
             }
-
             let total = 0;
             cartItems.innerHTML = "";
             cart.forEach(item => {
                 total += item.price * item.quantity;
-                const imgSrc = item.images360 ? item.images360[0] : item.image;
                 cartItems.innerHTML += `
-                            <div class="cart-item">
-                                <img src="${imgSrc}" alt="${item.name}">
-                                <div class="cart-item-info">
-                                    <h4>${item.name}</h4>
-                                    <p class="cart-item-price">${item.price} ج.م</p>
-                                    <p class="cart-item-size">المقاس: ${item.selectedSize || 'غير محدد'}</p>
-                                    <div class="qty-box">
-                                        <button onclick="changeQuantity(${item.id}, -1, '${item.selectedSize}')">−</button>
-                                        <span>${item.quantity}</span>
-                                        <button onclick="changeQuantity(${item.id}, 1, '${item.selectedSize}')">+</button>
-                                    </div>
-                                </div>
-                                <button class="remove-item" onclick="removeFromCart(${item.id}, '${item.selectedSize}')">🗑️</button>
+                    <div class="cart-item">
+                        <img src="${item.image}" alt="${item.name}">
+                        <div class="cart-item-info">
+                            <h4>${item.name}</h4>
+                            <p class="cart-item-price">${item.price} ج.م</p>
+                            <div class="qty-box">
+                                <button onclick="changeQuantity(${item.id}, -1)">−</button>
+                                <span>${item.quantity}</span>
+                                <button onclick="changeQuantity(${item.id}, 1)">+</button>
                             </div>
-                        `;
+                        </div>
+                        <button class="remove-item" onclick="removeFromCart(${item.id})">🗑️</button>
+                    </div>`;
             });
             if (cartTotal) cartTotal.innerText = total;
         }
 
-        function changeQuantity(id, change, size) {
-            const index = cart.findIndex(item => item.id === id && item.selectedSize === size);
+        function changeQuantity(id, change) {
+            const index = cart.findIndex(item => item.id === id);
             if (index === -1) return;
             cart[index].quantity += change;
             if (cart[index].quantity <= 0) cart.splice(index, 1);
@@ -3420,8 +3062,8 @@
             renderCart();
         }
 
-        function removeFromCart(id, size) {
-            cart = cart.filter(item => !(item.id === id && item.selectedSize === size));
+        function removeFromCart(id) {
+            cart = cart.filter(item => item.id !== id);
             localStorage.setItem("cart", JSON.stringify(cart));
             updateCartIconCount();
             renderCart();
@@ -3456,126 +3098,34 @@
         }
 
         // ============================================================
-        // دوال صفحة تفاصيل المنتج (مع 10 منتجات مشابهة عشوائية)
+        // دوال صفحة تفاصيل المنتج
         // ============================================================
-
         function openProductDetails(productId) {
             const product = allProducts.find(p => p.id === productId);
-            if (!product) {
-                showNotification('⚠️ المنتج غير موجود');
-                return;
-            }
-
+            if (!product) return;
             currentDetailProductId = productId;
-            detailSelectedSize = null;
-
             const modal = document.getElementById('productDetailsModal');
             const content = document.getElementById('productDetailsContent');
-
-            const images = product.images360 || [product.image];
-
-            let sizesHTML = '';
-            if (product.sizes && product.sizes.length > 0) {
-                sizesHTML = `<div class="size-selector">`;
-                product.sizes.forEach(size => {
-                    sizesHTML += `
-                                <button class="size-btn" onclick="selectDetailSize('${size}')" data-size="${size}">
-                                    ${size}
-                                </button>
-                            `;
-                });
-                sizesHTML += `</div>`;
-            }
-
-            const fullStars = Math.floor(product.rating);
-            const halfStar = product.rating % 1 >= 0.5 ? 1 : 0;
-            let starsHTML = '⭐'.repeat(fullStars) + (halfStar ? '⭐' : '');
-
-            const freeShippingHTML = product.freeShipping ?
-                `<span class="free-shipping-badge">🚚 توصيل مجاني</span>` : '';
-
-            // إنشاء الصور المصغرة
-            let thumbnailsHTML = images.map((img, i) => `
-                        <img src="${img}" alt="${product.name}" onclick="changeDetailImage(${i})" data-index="${i}" ${i === 0 ? 'class="active"' : ''}>
-                    `).join('');
-
-            // ===== الحصول على 10 منتجات مشابهة عشوائية من نفس التصنيف =====
-            const similarProducts = allProducts
-                .filter(p => p.id !== product.id && p.category === product.category)
-                .sort(() => Math.random() - 0.5) // 🔀 ترتيب عشوائي
-                .slice(0, 10); // نأخذ أول 10 منتجات فقط
-
+            const similarProducts = allProducts.filter(p => p.id !== product.id && p.category === product.category).slice(0, 4);
             let similarProductsHTML = '';
             if (similarProducts.length > 0) {
-                similarProductsHTML = `
-                            <div class="similar-products-section">
-                                <h3>🛍️ <span>منتجات مشابهة</span> (${similarProducts.length})</h3>
-                                <div class="similar-products-grid">
-                                    ${similarProducts.map(p => {
-                                        const imgSrc = p.images360 ? p.images360[0] : p.image;
-                                        return `
-                                            <div class="similar-product-card" onclick="openProductDetails(${p.id})">
-                                                ${p.discount ? `<span class="similar-discount-badge">${p.discount}</span>` : ''}
-                                                <img src="${imgSrc}" alt="${p.name}" loading="lazy">
-                                                <div class="similar-product-info">
-                                                    <h4>${p.name}</h4>
-                                                    <div>
-                                                        <span class="price">${p.price} ج.م</span>
-                                                        ${p.oldPrice ? `<span class="old-price">${p.oldPrice} ج.م</span>` : ''}
-                                                    </div>
-                                                    <button class="similar-add-btn" onclick="event.stopPropagation(); addToCart(${p.id})">🛒 أضف للعربة</button>
-                                                </div>
-                                            </div>
-                                        `;
-                                    }).join('')}
-                                </div>
-                            </div>
-                        `;
+                similarProductsHTML = `<div class="similar-products-section"><h3>🛍️ <span>منتجات مشابهة</span></h3><div class="similar-products-grid">${similarProducts.map(p => `<div class="similar-product-card" onclick="openProductDetails(${p.id})"><img src="${p.image}" alt="${p.name}"><div class="similar-product-info"><h4>${p.name}</h4><div><span class="price">${p.price} ج.م</span></div></div></div>`).join('')}</div></div>`;
             }
-
             content.innerHTML = `
-                        <div class="product-details-grid">
-                            <!-- الصور -->
-                            <div class="product-details-images">
-                                <div class="product-details-main-image" id="detailMainImage" onclick="toggleZoom()">
-                                    <img src="${images[0]}" alt="${product.name}" id="detailMainImg">
-                                </div>
-                                <div class="product-details-thumbnails" id="detailThumbnails">
-                                    ${thumbnailsHTML}
-                                </div>
-                            </div>
-
-                            <!-- المعلومات -->
-                            <div class="product-details-info">
-                                <button class="back-btn" onclick="closeProductDetails()">← العودة إلى المتجر</button>
-                                <h1>${product.name}</h1>
-                                <div class="rating-row">
-                                    <span class="stars">${starsHTML}</span>
-                                    <span class="reviews">(${product.reviews || 0} تقييم)</span>
-                                </div>
-                                <div class="price-row">
-                                    <span class="current">${product.price} ج.م</span>
-                                    ${product.oldPrice ? `<span class="old">${product.oldPrice} ج.م</span>` : ''}
-                                    ${product.discount ? `<span class="discount">${product.discount} خصم</span>` : ''}
-                                </div>
-                                ${freeShippingHTML}
-                                <div class="description">
-                                    <strong>📝 الوصف:</strong>
-                                    <p>${product.description || 'لا يوجد وصف لهذا المنتج'}</p>
-                                </div>
-                                <div class="specs">
-                                    <span><strong>🏷️ العلامة التجارية:</strong> ${product.brand || 'Aviro'}</span>
-                                    <span><strong>🧵 المادة:</strong> ${product.material || 'غير محدد'}</span>
-                                    <span><strong>✅ الضمان:</strong> ${product.warranty || 'غير محدد'}</span>
-                                    <span><strong>📦 التوصيل:</strong> ${product.freeShipping ? 'مجاني' : 'يتم حسابه عند الشراء'}</span>
-                                </div>
-                                ${sizesHTML}
-                                <button class="add-to-cart-btn" onclick="addToCartFromDetails()">🛒 إضافة إلى العربة</button>
-                            </div>
-                        </div>
-                        ${similarProductsHTML}
-                    `;
-
+                <div class="product-details-grid">
+                    <div class="product-details-images">
+                        <div class="product-details-main-image"><img src="${product.image}" alt="${product.name}"></div>
+                    </div>
+                    <div class="product-details-info">
+                        <button class="back-btn" onclick="closeProductDetails()">← العودة إلى المتجر</button>
+                        <h1>${product.name}</h1>
+                        <div class="rating-row"><span class="stars">${'⭐'.repeat(Math.floor(product.rating))}</span><span class="reviews">(${product.reviews || 0} تقييم)</span></div>
+                        <div class="price-row"><span class="current">${product.price} ج.م</span>${product.oldPrice ? `<span class="old">${product.oldPrice} ج.م</span>` : ''}</div>
+                        <div class="description"><strong>📝 الوصف:</strong><p>${product.description}</p></div>
+                        <div class="specs"><span><strong>🏷️ العلامة التجارية:</strong> ${product.brand}</span><span><strong>✅ الضمان:</strong> ${product.warranty}</span></div>
+                        <button class="add-to-cart-btn" onclick="addToCartFromDetails()">🛒 إضافة إلى العربة</button>
+                    </div>
+                </div>${similarProductsHTML}`;
             modal.classList.add('open');
             document.body.style.overflow = 'hidden';
         }
@@ -3584,60 +3134,12 @@
             document.getElementById('productDetailsModal').classList.remove('open');
             document.body.style.overflow = '';
             currentDetailProductId = null;
-            detailSelectedSize = null;
-        }
-
-        function changeDetailImage(index) {
-            const product = allProducts.find(p => p.id === currentDetailProductId);
-            if (!product) return;
-
-            const images = product.images360 || [product.image];
-            const mainImg = document.getElementById('detailMainImg');
-            if (!mainImg) return;
-
-            mainImg.src = images[index];
-
-            document.querySelectorAll('#detailThumbnails img').forEach((el, i) => {
-                el.classList.toggle('active', i === index);
-            });
-
-            document.getElementById('detailMainImage')?.classList.remove('zoomed');
-        }
-
-        function toggleZoom() {
-            const el = document.getElementById('detailMainImage');
-            if (el) el.classList.toggle('zoomed');
-        }
-
-        function selectDetailSize(size) {
-            detailSelectedSize = size;
-            document.querySelectorAll('.product-details-info .size-selector .size-btn').forEach(btn => {
-                btn.classList.toggle('selected', btn.dataset.size === size);
-            });
         }
 
         function addToCartFromDetails() {
             const product = allProducts.find(p => p.id === currentDetailProductId);
             if (!product) return;
-
-            if (product.sizes && product.sizes.length > 0 && !detailSelectedSize) {
-                showNotification('⚠️ يرجى اختيار المقاس أولاً');
-                return;
-            }
-
-            const selectedSize = detailSelectedSize || 'غير محدد';
-            const existingIndex = cart.findIndex(item => item.id === product.id && item.selectedSize === selectedSize);
-
-            if (existingIndex !== -1) {
-                cart[existingIndex].quantity++;
-            } else {
-                cart.push({
-                    ...product,
-                    quantity: 1,
-                    selectedSize: selectedSize
-                });
-            }
-
+            cart.push({ ...product, quantity: 1, selectedSize: 'غير محدد' });
             localStorage.setItem("cart", JSON.stringify(cart));
             updateCartIconCount();
             renderCart();
@@ -3653,16 +3155,15 @@
         const contactSubmitBtn = document.getElementById('contactSubmitBtn');
 
         if (contactForm && contactStatus && contactSubmitBtn) {
-            contactForm.addEventListener('submit', async function(event) {
+            contactForm.addEventListener('submit', async function (event) {
                 event.preventDefault();
-
                 contactStatus.textContent = '⏳ جاري الإرسال...';
                 contactStatus.className = 'status-msg';
                 contactSubmitBtn.disabled = true;
                 contactSubmitBtn.textContent = '⏳ جاري الإرسال...';
 
                 const formData = new FormData(contactForm);
-                const { data, error } = await forminit.submit(FORM_ID, formData);
+                const { data, error } = await forminit.submit(FORM_ID, formData, { redirect: REDIRECT_URL });
 
                 contactSubmitBtn.disabled = false;
                 contactSubmitBtn.textContent = '📧 تأكيد وإرسال الطلب';
@@ -3678,33 +3179,22 @@
                 contactStatus.className = 'status-msg success';
                 contactForm.reset();
                 showNotification('✅ تم إرسال رسالتك بنجاح!', 'success');
-
-                setTimeout(() => {
-                    contactStatus.textContent = '';
-                    contactStatus.className = 'status-msg';
-                }, 5000);
+                setTimeout(() => { contactStatus.textContent = ''; contactStatus.className = 'status-msg'; }, 5000);
             });
         }
 
         // ربط الأحداث عند تحميل الصفحة
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             window.addEventListener('scroll', () => {
                 const btn = document.getElementById('backToTop');
                 if (window.scrollY > 400) btn.classList.add('show');
                 else btn.classList.remove('show');
             });
-
-            // إغلاق مودال التفاصيل عند النقر خارج المحتوى
-            document.getElementById('productDetailsModal')?.addEventListener('click', function(e) {
-                if (e.target === this) closeProductDetails();
-            });
-
-            // إغلاق مودال الدفع عند النقر خارج المحتوى
-            document.getElementById('checkoutModal')?.addEventListener('click', function(e) {
-                if (e.target === this) closeCheckoutModal();
-            });
+            document.getElementById('productDetailsModal')?.addEventListener('click', function (e) { if (e.target === this) closeProductDetails(); });
+            document.getElementById('checkoutModal')?.addEventListener('click', function (e) { if (e.target === this) closeCheckoutModal(); });
         });
     </script>
 </body>
 
+</html>
 </html>
