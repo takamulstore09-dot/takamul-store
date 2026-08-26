@@ -26,7 +26,6 @@
     <script src="https://forminit.com/sdk/v1/forminit.js"></script>
 
     <style>
-        /* ===== BASES ===== */
         * {
             margin: 0;
             padding: 0;
@@ -43,7 +42,6 @@
             color: #1a1a2e;
         }
 
-        /* ===== شاشات الدخول ===== */
         #loginScreen {
             position: fixed;
             inset: 0;
@@ -155,7 +153,6 @@
             display: block;
         }
 
-        /* ===== Google Sign-In Button ===== */
         #g_id_signin {
             display: flex;
             justify-content: center;
@@ -164,43 +161,6 @@
             margin: 10px 0;
         }
 
-        /* ===== Setup Instructions ===== */
-        .setup-instructions {
-            background: #fef3c7;
-            border: 1px solid #f59e0b;
-            border-radius: 12px;
-            padding: 15px;
-            margin-top: 15px;
-            text-align: right;
-            display: none;
-        }
-
-        .setup-instructions.show {
-            display: block;
-        }
-
-        .setup-instructions h4 {
-            color: #92400e;
-            margin-bottom: 8px;
-        }
-
-        .setup-instructions p {
-            color: #78350f;
-            font-size: 13px;
-            line-height: 1.8;
-        }
-
-        .setup-instructions code {
-            background: #fff;
-            padding: 2px 8px;
-            border-radius: 4px;
-            font-size: 12px;
-            color: #1a1a2e;
-            direction: ltr;
-            display: inline-block;
-        }
-
-        /* ===== الهيدر ===== */
         header {
             position: sticky;
             top: 0;
@@ -341,7 +301,6 @@
             text-align: center;
         }
 
-        /* ===== شريط التصنيفات ===== */
         .categories-bar {
             background: #1e293b;
             padding: 0 30px;
@@ -381,7 +340,6 @@
             color: #059669;
         }
 
-        /* ===== الهيرو ===== */
         .hero {
             width: 100%;
             height: 350px;
@@ -423,7 +381,6 @@
             font-weight: 300;
         }
 
-        /* ===== قسم المنتجات ===== */
         .section-title {
             max-width: 1400px;
             margin: 30px auto 10px;
@@ -582,7 +539,6 @@
             display: block;
         }
 
-        /* ===== سلة التسوق ===== */
         .overlay {
             position: fixed;
             inset: 0;
@@ -807,7 +763,6 @@
             background: #e2e8f0;
         }
 
-        /* ===== الإشعارات ===== */
         .notification {
             position: fixed;
             bottom: 30px;
@@ -838,7 +793,6 @@
             border-right: 4px solid #dc2626;
         }
 
-        /* ===== مودال ===== */
         .privacy-modal {
             position: fixed;
             inset: 0;
@@ -904,7 +858,6 @@
             font-weight: 700;
         }
 
-        /* ===== مودال الدفع ===== */
         .checkout-box {
             display: flex;
             flex-direction: column;
@@ -951,7 +904,6 @@
             box-shadow: 0 0 0 4px rgba(5, 150, 105, 0.15) !important;
         }
 
-        /* ===== زر العودة للأعلى ===== */
         .back-to-top {
             position: fixed;
             bottom: 30px;
@@ -981,7 +933,6 @@
             box-shadow: 0 8px 30px rgba(5, 150, 105, 0.4);
         }
 
-        /* ===== شاشة التحميل ===== */
         .loading-spinner {
             display: none;
             text-align: center;
@@ -1009,7 +960,6 @@
             }
         }
 
-        /* ===== نموذج Forminit ===== */
         .forminit-contact-section {
             width: 100%;
             padding: 0;
@@ -1092,7 +1042,6 @@
             color: #dc2626;
         }
 
-        /* ===== صفحة تفاصيل المنتج ===== */
         .product-details-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -1253,7 +1202,6 @@
             background: #e2e8f0;
         }
 
-        /* ===== منتجات مشابهة ===== */
         .similar-products-section {
             margin-top: 30px;
             border-top: 1px solid #e2e8f0;
@@ -1321,7 +1269,6 @@
             color: #1a1a2e;
         }
 
-        /* ===== الفوتر ===== */
         footer {
             background: #0f172a;
             color: #cbd5e1;
@@ -1365,7 +1312,6 @@
             font-size: 14px;
         }
 
-        /* ===== التجاوب ===== */
         @media(max-width: 992px) {
             #productsContainer {
                 grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
@@ -1610,31 +1556,10 @@
             <div id="loginError" class="login-error"></div>
             <div id="loginSuccess" class="login-success"></div>
 
-            <!-- ===== تعليمات الإعداد ===== -->
-            <div class="setup-instructions" id="setupInstructions">
-                <h4>⚠️ خطأ في تسجيل الدخول؟</h4>
-                <p>
-                    <strong>لإعداد Google Sign-In بشكل صحيح:</strong><br><br>
-                    1️⃣ اذهب إلى <a href="https://console.cloud.google.com/" target="_blank" style="color:#059669;">Google Cloud Console</a><br>
-                    2️⃣ اختر مشروعك <code>takamul-c419c</code><br>
-                    3️⃣ من القائمة الجانبية: <strong>APIs & Services → Credentials</strong><br>
-                    4️⃣ ابحث عن OAuth 2.0 Client ID الخاص بك<br>
-                    5️⃣ أضف هذه <strong>Authorized redirect URIs</strong>:<br>
-                    <code>https://takamul-c419c.firebaseapp.com/__/auth/handler</code><br>
-                    <code>http://localhost</code><br>
-                    6️⃣ أضف <strong>Authorized JavaScript origins</strong>:<br>
-                    <code>http://localhost</code><br>
-                    <code>https://takamul-c419c.firebaseapp.com</code><br>
-                    7️⃣ في Firebase Console → Authentication → Sign-in methods → Google (مفعّل)
-                </p>
-            </div>
-
             <div style="margin-top: 25px; color: #94a3b8; font-size: 13px;">
                 <a href="#" onclick="showPrivacyPolicy(event)" style="color: #059669; text-decoration: none;">سياسة الخصوصية</a>
                 &nbsp;|&nbsp;
                 <a href="#" onclick="showAboutModal(event)" style="color: #059669; text-decoration: none;">من نحن</a>
-                &nbsp;|&nbsp;
-                <a href="#" onclick="toggleSetupInstructions(event)" style="color: #f59e0b; text-decoration: none;">⚠️ إعدادات Google</a>
             </div>
         </div>
     </div>
@@ -1893,7 +1818,7 @@
         console.log('✅ Forminit initialized');
 
         // ============================================================
-        // 4. Google Sign-In
+        // 4. Google Sign-In - معالجة الاستجابة
         // ============================================================
         function handleCredentialResponse(response) {
             console.log("✅ تم استلام رد من Google");
@@ -1910,22 +1835,16 @@
                         document.getElementById('loginSuccess').textContent = '✅ مرحباً ' + (result.user.displayName || result.user.email) + '!';
                         document.getElementById('loginSuccess').classList.add('show');
                         document.getElementById('loginError').classList.remove('show');
-                        document.getElementById('setupInstructions').classList.remove('show');
                         showNotification('👋 مرحباً بك ' + (result.user.displayName || result.user.email));
                     })
                     .catch((error) => {
                         console.error('❌ خطأ Firebase:', error);
                         let errorMessage = '⚠️ فشل تسجيل الدخول عبر Google';
-
                         if (error.code === 'auth/account-exists-with-different-credential') {
                             errorMessage = '⚠️ هذا البريد الإلكتروني مسجل بطريقة أخرى.';
                         } else if (error.code === 'auth/popup-closed-by-user') {
                             errorMessage = '⚠️ تم إغلاق النافذة. حاول مرة أخرى.';
-                        } else if (error.code === 'auth/unauthorized-domain') {
-                            errorMessage = '⚠️ النطاق غير مصرح به. أضف النطاق في Firebase Console.';
-                            document.getElementById('setupInstructions').classList.add('show');
                         }
-
                         document.getElementById('loginError').textContent = errorMessage;
                         document.getElementById('loginError').classList.add('show');
                     });
@@ -1938,16 +1857,7 @@
         }
 
         // ============================================================
-        // 5. عرض تعليمات الإعداد
-        // ============================================================
-        function toggleSetupInstructions(e) {
-            if (e) e.preventDefault();
-            const el = document.getElementById('setupInstructions');
-            el.classList.toggle('show');
-        }
-
-        // ============================================================
-        // 6. تسجيل الخروج
+        // 5. تسجيل الخروج
         // ============================================================
         function handleLogout() {
             if (confirm('هل تريد تسجيل الخروج؟')) {
@@ -1962,7 +1872,7 @@
         }
 
         // ============================================================
-        // 7. مراقبة حالة المصادقة
+        // 6. مراقبة حالة المصادقة
         // ============================================================
         auth.onAuthStateChanged((user) => {
             const loginScreen = document.getElementById('loginScreen');
@@ -1988,7 +1898,7 @@
         });
 
         // ============================================================
-        // 8. دوال المودالات
+        // 7. دوال المودالات
         // ============================================================
         function showAboutModal(e) {
             if (e) e.preventDefault();
@@ -2016,7 +1926,7 @@
         });
 
         // ============================================================
-        // 9. بيانات المنتجات
+        // 8. بيانات المنتجات
         // ============================================================
         const allProducts = [{
                 id: 1,
@@ -2133,14 +2043,14 @@
         ];
 
         // ============================================================
-        // 10. المتغيرات العامة
+        // 9. المتغيرات العامة
         // ============================================================
         let cart = JSON.parse(localStorage.getItem('cart')) || [];
         let currentCategory = 'all';
         let currentDetailProductId = null;
 
         // ============================================================
-        // 11. دوال المتجر
+        // 10. دوال المتجر
         // ============================================================
 
         function cleanName(name) {
@@ -2201,7 +2111,7 @@
         }
 
         // ============================================================
-        // 12. إرسال الطلب
+        // 11. إرسال الطلب
         // ============================================================
         async function sendOrderViaForminit(formData) {
             try {
@@ -2305,7 +2215,7 @@
         }
 
         // ============================================================
-        // 13. دوال عرض المنتجات
+        // 12. دوال عرض المنتجات
         // ============================================================
         function displayProducts(productsToDisplay) {
             const container = document.getElementById('productsContainer');
@@ -2460,7 +2370,7 @@
         }
 
         // ============================================================
-        // 14. دوال صفحة تفاصيل المنتج
+        // 13. دوال صفحة تفاصيل المنتج
         // ============================================================
         function openProductDetails(productId) {
             const product = allProducts.find(p => p.id === productId);
@@ -2515,7 +2425,7 @@
         }
 
         // ============================================================
-        // 15. Forminit - نموذج التواصل
+        // 14. Forminit - نموذج التواصل
         // ============================================================
         const contactForm = document.getElementById('contactForm');
         const contactStatus = document.getElementById('contactStatus');
@@ -2544,7 +2454,7 @@
         }
 
         // ============================================================
-        // 16. ربط الأحداث
+        // 15. ربط الأحداث
         // ============================================================
         document.addEventListener('DOMContentLoaded', function() {
             window.addEventListener('scroll', () => {
