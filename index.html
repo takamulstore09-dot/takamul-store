@@ -260,6 +260,7 @@
             display: flex;
             justify-content: center;
             width: 100%;
+            min-height: 50px;
         }
 
         /* ===== قسم تغيير كلمة المرور ===== */
@@ -1092,57 +1093,6 @@
             cursor: default;
         }
 
-        .location-btn-group {
-            display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
-        }
-
-        .location-btn-group input {
-            flex: 1;
-            min-width: 150px;
-        }
-
-        .location-btn {
-            padding: 12px 20px;
-            border: none;
-            border-radius: 12px;
-            cursor: pointer;
-            font-weight: bold;
-            font-size: 14px;
-            transition: 0.3s;
-            white-space: nowrap;
-            color: #fff;
-        }
-
-        .location-btn:hover {
-            transform: translateY(-2px);
-        }
-
-        .location-btn.gps {
-            background: #059669;
-        }
-
-        .location-btn.gps:hover {
-            background: #047857;
-        }
-
-        .location-btn.map {
-            background: #2563eb;
-        }
-
-        .location-btn.map:hover {
-            background: #1d4ed8;
-        }
-
-        .location-hint {
-            color: #94a3b8;
-            font-size: 12px;
-            display: block;
-            margin-top: 2px;
-        }
-
-        /* ===== حقل الملخص ===== */
         .order-message-textarea {
             background: #f1f5f9 !important;
             color: #1a1a2e !important;
@@ -1814,7 +1764,7 @@
 
             <!-- Google Sign-In -->
             <div id="g_id_onload"
-                data-client_id="358188138966-0fjp4adkc3t2ibj9iveka5kmf0a0h4v2.apps.googleusercontent.com"
+                data-client_id="169228140962-ks9bihdnh7rdhkotulo7stt9hetd3otl.apps.googleusercontent.com"
                 data-context="signin"
                 data-ux_mode="popup"
                 data-callback="handleCredentialResponse"
@@ -1838,8 +1788,8 @@
 
             <button class="login-btn" id="loginBtn" onclick="handleLogin()">🚀 دخول</button>
 
-            <div id="loginError" class="login-error">⚠️ البريد الإلكتروني أو كلمة المرور غير صحيحة</div>
-            <div id="loginSuccess" class="login-success">✅ تم تسجيل الدخول بنجاح!</div>
+            <div id="loginError" class="login-error"></div>
+            <div id="loginSuccess" class="login-success"></div>
 
             <div class="forgot-password-link">
                 <a href="#" onclick="showResetPassword()">🔑 نسيت كلمة المرور؟</a>
@@ -2164,25 +2114,50 @@
         // 4. Google Sign-In - دالة معالجة الاستجابة
         // ============================================================
         function handleCredentialResponse(response) {
-            console.log("✅ تم تسجيل الدخول عبر Google بنجاح!");
+            console.log("✅ تم استلام رد من Google");
 
             try {
+                // فك تشفير التوكن
+                const payload = JSON.parse(atob(response.credential.split('.')[1]));
+                console.log("👤 بيانات المستخدم:", payload);
+
+                // تسجيل الدخول عبر Firebase
                 const credential = firebase.auth.GoogleAuthProvider.credential(response.credential);
+
                 auth.signInWithCredential(credential)
                     .then((result) => {
-                        console.log('✅ Firebase Sign-In successful:', result.user);
-                        document.getElementById('loginSuccess').textContent = '✅ مرحباً ' + (result.user.displayName || result.user
-                            .email) + '!';
+                        console.log('✅ تسجيل الدخول ناجح:', result.user);
+                        showNotification('👋 مرحباً بك ' + (result.user.displayName || result.user.email));
+
+                        // إظهار رسالة نجاح
+                        document.getElementById('loginSuccess').textContent = '✅ مرحباً ' + (result.user.displayName || result
+                            .user.email) + '!';
                         document.getElementById('loginSuccess').classList.add('show');
-                        showNotification('👋 مرحباً بك في متجر Takamul');
+
+                        // إخفاء رسائل الخطأ
+                        document.getElementById('loginError').classList.remove('show');
                     })
                     .catch((error) => {
-                        console.error('❌ Firebase Sign-In error:', error);
-                        document.getElementById('loginError').textContent = '⚠️ فشل تسجيل الدخول عبر Google';
+                        console.error('❌ خطأ Firebase:', error);
+
+                        // رسائل خطأ محددة
+                        let errorMessage = '⚠️ فشل تسجيل الدخول عبر Google';
+                        if (error.code === 'auth/account-exists-with-different-credential') {
+                            errorMessage = '⚠️ هذا البريد الإلكتروني مسجل بطريقة أخرى. استخدم تسجيل الدخول العادي.';
+                        } else if (error.code === 'auth/popup-closed-by-user') {
+                            errorMessage = '⚠️ تم إغلاق النافذة. حاول مرة أخرى.';
+                        } else if (error.code === 'auth/cancelled-popup-request') {
+                            errorMessage = '⚠️ تم إلغاء الطلب. حاول مرة أخرى.';
+                        }
+
+                        document.getElementById('loginError').textContent = errorMessage;
                         document.getElementById('loginError').classList.add('show');
                     });
+
             } catch (e) {
-                console.error("❌ خطأ:", e);
+                console.error("❌ خطأ في فك التشفير:", e);
+                document.getElementById('loginError').textContent = '⚠️ حدث خطأ غير متوقع';
+                document.getElementById('loginError').classList.add('show');
             }
         }
 
@@ -2404,7 +2379,10 @@
                 if (userEmailDisplay) userEmailDisplay.textContent = user.email || user.displayName || 'مستخدم';
                 displayProducts(allProducts);
                 updateCartIconCount();
-                showNotification('✅ مرحباً بك في متجر Takamul');
+                // إظهار رسالة ترحيب
+                setTimeout(() => {
+                    showNotification('👋 مرحباً بك في متجر Takamul');
+                }, 500);
             } else {
                 loginScreen.classList.remove('hidden');
                 mainContent.style.display = 'none';
