@@ -1,538 +1,89 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Takamul | متجر تكامل</title>
-    
-    <!-- Firebase SDK فقط (لا حاجة لـ GSI) -->
-    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
-    
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-        body {
-            background: #f0f2f5;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            padding: 20px;
-        }
-        .login-box {
-            background: #ffffff;
-            padding: 50px 40px;
-            border-radius: 30px;
-            width: 100%;
-            max-width: 450px;
-            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.15);
-            text-align: center;
-        }
-        .logo-img {
-            width: 100px;
-            height: 100px;
-            object-fit: contain;
-            margin-bottom: 15px;
-            border-radius: 50%;
-            background: #fff;
-            padding: 10px;
-            border: 3px solid #059669;
-        }
-        .login-box h2 {
-            font-size: 32px;
-            margin-bottom: 8px;
-            color: #1a1a2e;
-        }
-        .login-box h2 span {
-            color: #059669;
-        }
-        .subtitle {
-            color: #64748b;
-            margin-bottom: 25px;
-            font-size: 15px;
-        }
-        .login-box input {
-            width: 100%;
-            padding: 16px 22px;
-            margin-bottom: 16px;
-            border-radius: 12px;
-            border: 2px solid #e2e8f0;
-            background: #f8fafc;
-            font-size: 16px;
-            outline: none;
-            transition: 0.3s;
-            text-align: right;
-        }
-        .login-box input:focus {
-            border-color: #059669;
-            box-shadow: 0 0 0 4px rgba(5, 150, 105, 0.15);
-        }
-        .login-btn {
-            width: 100%;
-            padding: 16px;
-            border: none;
-            border-radius: 12px;
-            font-weight: bold;
-            font-size: 19px;
-            cursor: pointer;
-            transition: 0.3s;
-            margin-top: 10px;
-            color: #ffffff;
-        }
-        .login-btn:hover {
-            transform: translateY(-2px);
-        }
-        .login-btn:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-            transform: none;
-        }
-        .login-btn.email-btn {
-            background: linear-gradient(135deg, #059669, #047857);
-        }
-        .login-btn.email-btn:hover {
-            box-shadow: 0 8px 25px rgba(5, 150, 105, 0.35);
-        }
-        .login-btn.google-btn {
-            background: #4285f4;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 12px;
-        }
-        .login-btn.google-btn:hover {
-            background: #3367d6;
-            box-shadow: 0 8px 25px rgba(66, 133, 244, 0.35);
-        }
-        .login-btn.google-btn img {
-            width: 24px;
-            height: 24px;
-        }
-        .divider {
-            display: flex;
-            align-items: center;
-            margin: 20px 0;
-            color: #94a3b8;
-        }
-        .divider::before,
-        .divider::after {
-            content: '';
-            flex: 1;
-            height: 1px;
-            background: #e2e8f0;
-        }
-        .divider span {
-            padding: 0 15px;
-            font-size: 13px;
-        }
-        .login-error {
-            color: #dc2626;
-            font-size: 14px;
-            margin-top: 12px;
-            display: none;
-            background: rgba(220, 38, 38, 0.1);
-            padding: 10px;
-            border-radius: 10px;
-            border: 1px solid rgba(220, 38, 38, 0.2);
-        }
-        .login-error.show {
-            display: block;
-        }
-        .login-success {
-            color: #059669;
-            font-size: 14px;
-            margin-top: 12px;
-            display: none;
-            background: rgba(5, 150, 105, 0.1);
-            padding: 10px;
-            border-radius: 10px;
-            border: 1px solid rgba(5, 150, 105, 0.2);
-        }
-        .login-success.show {
-            display: block;
-        }
-        .register-link {
-            color: #64748b;
-            font-size: 14px;
-            margin-top: 15px;
-        }
-        .register-link a {
-            color: #059669;
-            text-decoration: none;
-            font-weight: bold;
-        }
-        .register-link a:hover {
-            text-decoration: underline;
-        }
-        .forgot-password-link {
-            color: #64748b;
-            font-size: 13px;
-            margin-top: 12px;
-            display: block;
-        }
-        .forgot-password-link a {
-            color: #059669;
-            text-decoration: none;
-        }
-        .forgot-password-link a:hover {
-            text-decoration: underline;
-        }
-        .info-box {
-            background: #e8f4fd;
-            border: 1px solid #b8daff;
-            border-radius: 8px;
-            padding: 12px;
-            margin: 10px 0;
-            font-size: 13px;
-            color: #004085;
-            text-align: right;
-        }
-        .info-box code {
-            background: #fff;
-            padding: 2px 6px;
-            border-radius: 4px;
-            font-size: 12px;
-        }
-    </style>
+    <title>Takamul Store</title>
 </head>
 <body>
+    <h1>🛍️ Takamul Store</h1>
 
-    <!-- ===== شاشة تسجيل الدخول ===== -->
-    <div id="loginScreen">
-        <div class="login-box">
-            <img src="https://g.top4top.io/p_3889jf2jz1.png" alt="Takamul Logo" class="logo-img">
-            <h2><span>Takamul</span> Store</h2>
-            <p class="subtitle">🔐 تسجيل الدخول للوصول إلى المتجر</p>
-
-            <!-- ===== زر Google (يعمل دائماً) ===== -->
-            <button class="login-btn google-btn" onclick="signInWithGoogle()">
-                <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google">
-                تسجيل الدخول بـ Google
-            </button>
-
-            <div class="divider"><span>أو</span></div>
-
-            <!-- تسجيل الدخول العادي -->
-            <input type="email" id="loginEmail" placeholder="✉️ البريد الإلكتروني">
-            <input type="password" id="loginPassword" placeholder="🔑 كلمة المرور">
-            <button class="login-btn email-btn" id="loginBtn" onclick="handleLogin()">دخول 🚀</button>
-
-            <div id="loginError" class="login-error"></div>
-            <div id="loginSuccess" class="login-success"></div>
-
-            <div class="forgot-password-link">
-                <a href="#" onclick="resetPassword()">🔑 نسيت كلمة المرور؟</a>
-            </div>
-
-            <div class="register-link">
-                ليس لديك حساب؟ <a href="#" onclick="showRegister()">سجل الآن</a>
-            </div>
-
-            <!-- معلومات النطاق -->
-            <div class="info-box" id="domainInfo">
-                📍 النطاق الحالي: <code id="currentOrigin"></code>
-            </div>
-        </div>
+    <!-- حاوية تسجيل الدخول -->
+    <div id="g_id_onload"
+         data-client_id="358188138966-0fjp4adkc3t2ibj9iveka5kmf0a0h4v2.apps.googleusercontent.com"
+         data-context="signin"
+         data-ux_mode="popup"
+         data-callback="handleCredentialResponse"
+         data-auto_prompt="false">
     </div>
 
-    <!-- ===== شاشة التسجيل ===== -->
-    <div id="registerScreen" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.92); z-index:99998; backdrop-filter:blur(12px); justify-content:center; align-items:center;">
-        <div class="login-box">
-            <img src="https://g.top4top.io/p_3889jf2jz1.png" alt="Takamul Logo" class="logo-img">
-            <h2><span>📝</span> إنشاء حساب</h2>
-            <p class="subtitle">سجل الآن للاستمتاع بتجربة التسوق</p>
-
-            <input type="email" id="registerEmail" placeholder="✉️ البريد الإلكتروني">
-            <input type="password" id="registerPassword" placeholder="🔑 كلمة المرور (6 أحرف على الأقل)">
-            <input type="password" id="registerConfirmPassword" placeholder="🔑 تأكيد كلمة المرور">
-
-            <button class="login-btn email-btn" id="registerBtn" onclick="handleRegister()">إنشاء حساب ✨</button>
-
-            <div id="registerError" class="login-error"></div>
-            <div id="registerSuccess" class="login-success"></div>
-
-            <div class="register-link">
-                لديك حساب بالفعل؟ <a href="#" onclick="showLogin()">تسجيل الدخول</a>
-            </div>
-        </div>
+    <div class="g_id_signin"
+         data-type="standard"
+         data-shape="pill"
+         data-theme="outline"
+         data-text="signin_with"
+         data-size="large"
+         data-logo_alignment="left">
     </div>
 
-    <!-- ===== المحتوى الرئيسي (بعد تسجيل الدخول) ===== -->
-    <div id="mainContent" style="display:none; width:100%; max-width:1200px; margin:0 auto; padding:40px 20px;">
-        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:30px; flex-wrap:wrap; gap:15px; background:white; padding:20px 30px; border-radius:12px; box-shadow:0 2px 10px rgba(0,0,0,0.08);">
-            <h1 style="color:#1a1a2e; font-size:24px;">🛍️ مرحباً بك في <span style="color:#059669;">Takamul</span> Store</h1>
-            <div style="display:flex; gap:15px; align-items:center; flex-wrap:wrap;">
-                <span id="userEmailDisplay" style="background:#f1f5f9; padding:8px 16px; border-radius:8px; color:#1a1a2e;">user@email.com</span>
-                <button onclick="handleLogout()" style="background:#dc2626; color:white; border:none; padding:10px 20px; border-radius:8px; cursor:pointer; font-weight:bold;">🚪 خروج</button>
-            </div>
-        </div>
-        <div style="background:white; padding:60px; border-radius:16px; text-align:center; box-shadow:0 2px 10px rgba(0,0,0,0.08);">
-            <p style="font-size:22px; color:#64748b;">📦 محتوى المتجر سيظهر هنا بعد تسجيل الدخول</p>
-        </div>
+    <!-- حاوية عرض بيانات المستخدم (تظهر بعد تسجيل الدخول) -->
+    <div id="userInfo" style="display:none; margin-top:20px;">
+        <img id="userPicture" src="" width="50" height="50">
+        <p id="userName"></p>
+        <p id="userEmail"></p>
+        <button onclick="logout()">تسجيل الخروج</button>
     </div>
 
     <script>
-        // ============================================================
-        // إعدادات Firebase
-        // ============================================================
-        const firebaseConfig = {
-            apiKey: "AIzaSyCvB8r9dna0SCZXoNW4M0wacS50dNDWETQ",
-            authDomain: "takamul-c419c.firebaseapp.com",
-            projectId: "takamul-c419c",
-            storageBucket: "takamul-c419c.firebasestorage.app",
-            messagingSenderId: "169228140962",
-            appId: "1:169228140962:web:1bceb52f2a36326111b2fb",
-            measurementId: "G-M37JENVES1"
+        // دالة معالجة نجاح تسجيل الدخول
+        function handleCredentialResponse(response) {
+            console.log("✅ تم تسجيل الدخول بنجاح!");
+            console.log("🔑 الـ Token:", response.credential);
+            
+            try {
+                // فك تشفير الـ Token لجلب بيانات المستخدم
+                const payload = JSON.parse(atob(response.credential.split('.')[1]));
+                console.log("👤 بيانات المستخدم:", payload);
+                
+                // عرض البيانات في الصفحة
+                document.getElementById('userPicture').src = payload.picture;
+                document.getElementById('userName').textContent = "👤 " + payload.name;
+                document.getElementById('userEmail').textContent = "📧 " + payload.email;
+                document.getElementById('userInfo').style.display = 'block';
+                
+                // إخفاء زر تسجيل الدخول
+                document.querySelector('.g_id_signin').style.display = 'none';
+                
+                // تخزين البيانات (اختياري)
+                localStorage.setItem('user', JSON.stringify(payload));
+                
+            } catch (e) {
+                console.error("❌ خطأ في فك التشفير:", e);
+            }
+        }
+        
+        // دالة تسجيل الخروج
+        function logout() {
+            localStorage.removeItem('user');
+            document.getElementById('userInfo').style.display = 'none';
+            document.querySelector('.g_id_signin').style.display = 'block';
+        }
+        
+        // التحقق من وجود جلسة سابقة
+        window.onload = function() {
+            const userData = localStorage.getItem('user');
+            if (userData) {
+                const payload = JSON.parse(userData);
+                document.getElementById('userPicture').src = payload.picture;
+                document.getElementById('userName').textContent = "👤 " + payload.name;
+                document.getElementById('userEmail').textContent = "📧 " + payload.email;
+                document.getElementById('userInfo').style.display = 'block';
+                document.querySelector('.g_id_signin').style.display = 'none';
+            }
         };
-
-        firebase.initializeApp(firebaseConfig);
-        const auth = firebase.auth();
-        console.log('✅ Firebase initialized!');
-
-        // ============================================================
-        // ✅ تسجيل الدخول بـ Google (يعمل دائماً)
-        // ============================================================
-        function signInWithGoogle() {
-            const provider = new firebase.auth.GoogleAuthProvider();
-            const errorEl = document.getElementById('loginError');
-            const successEl = document.getElementById('loginSuccess');
-            
-            errorEl.classList.remove('show');
-            successEl.classList.remove('show');
-            
-            // عرض رسالة انتظار
-            const googleBtn = document.querySelector('.google-btn');
-            googleBtn.disabled = true;
-            googleBtn.innerHTML = '⏳ جاري تسجيل الدخول...';
-
-            auth.signInWithPopup(provider)
-                .then((result) => {
-                    console.log('✅ Google Sign-In successful:', result.user);
-                    successEl.textContent = '✅ مرحباً ' + (result.user.displayName || result.user.email) + '!';
-                    successEl.classList.add('show');
-                })
-                .catch((error) => {
-                    console.error('❌ Google Sign-In error:', error);
-                    
-                    let errorMessage = '⚠️ فشل تسجيل الدخول بـ Google';
-                    if (error.code === 'auth/popup-blocked') {
-                        errorMessage = '⚠️ تم حظر النافذة المنبثقة. يرجى السماح بالنوافذ المنبثقة';
-                    } else if (error.code === 'auth/cancelled-popup-request') {
-                        errorMessage = '⚠️ تم إلغاء طلب تسجيل الدخول';
-                    } else if (error.code === 'auth/unauthorized-domain') {
-                        errorMessage = '⚠️ النطاق غير مصرح به. أضف ' + window.location.origin + ' إلى Authorized JavaScript Origins';
-                    } else if (error.code === 'auth/network-request-failed') {
-                        errorMessage = '⚠️ فشل الاتصال بالشبكة. تأكد من اتصال الإنترنت';
-                    }
-                    
-                    errorEl.textContent = errorMessage;
-                    errorEl.classList.add('show');
-                })
-                .finally(() => {
-                    googleBtn.disabled = false;
-                    googleBtn.innerHTML = '<img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google" style="width:24px;height:24px;"> تسجيل الدخول بـ Google';
-                });
-        }
-
-        // ============================================================
-        // تسجيل الدخول العادي
-        // ============================================================
-        function handleLogin() {
-            const email = document.getElementById('loginEmail').value.trim();
-            const password = document.getElementById('loginPassword').value.trim();
-            const errorEl = document.getElementById('loginError');
-            const successEl = document.getElementById('loginSuccess');
-            const loginBtn = document.getElementById('loginBtn');
-
-            errorEl.classList.remove('show');
-            successEl.classList.remove('show');
-
-            if (!email || !password) {
-                errorEl.textContent = '⚠️ يرجى إدخال البريد الإلكتروني وكلمة المرور';
-                errorEl.classList.add('show');
-                return;
-            }
-
-            loginBtn.disabled = true;
-            loginBtn.innerHTML = 'جاري تسجيل الدخول... ⏳';
-
-            auth.signInWithEmailAndPassword(email, password)
-                .then((userCredential) => {
-                    successEl.textContent = '✅ تم تسجيل الدخول بنجاح!';
-                    successEl.classList.add('show');
-                })
-                .catch((error) => {
-                    let errorMessage = '⚠️ البريد الإلكتروني أو كلمة المرور غير صحيحة';
-                    if (error.code === 'auth/user-not-found') {
-                        errorMessage = '⚠️ لا يوجد حساب بهذا البريد الإلكتروني';
-                    } else if (error.code === 'auth/wrong-password') {
-                        errorMessage = '⚠️ كلمة المرور غير صحيحة';
-                    } else if (error.code === 'auth/invalid-email') {
-                        errorMessage = '⚠️ البريد الإلكتروني غير صحيح';
-                    } else if (error.code === 'auth/too-many-requests') {
-                        errorMessage = '⚠️ تم حظر الحساب مؤقتاً. حاول لاحقاً';
-                    }
-                    errorEl.textContent = errorMessage;
-                    errorEl.classList.add('show');
-                })
-                .finally(() => {
-                    loginBtn.disabled = false;
-                    loginBtn.innerHTML = 'دخول 🚀';
-                });
-        }
-
-        // ============================================================
-        // التسجيل
-        // ============================================================
-        function handleRegister() {
-            const email = document.getElementById('registerEmail').value.trim();
-            const password = document.getElementById('registerPassword').value.trim();
-            const confirmPassword = document.getElementById('registerConfirmPassword').value.trim();
-            const errorEl = document.getElementById('registerError');
-            const successEl = document.getElementById('registerSuccess');
-            const registerBtn = document.getElementById('registerBtn');
-
-            errorEl.classList.remove('show');
-            successEl.classList.remove('show');
-
-            if (!email || !password || !confirmPassword) {
-                errorEl.textContent = '⚠️ يرجى ملء جميع الحقول';
-                errorEl.classList.add('show');
-                return;
-            }
-            if (password.length < 6) {
-                errorEl.textContent = '⚠️ كلمة المرور يجب أن تكون 6 أحرف على الأقل';
-                errorEl.classList.add('show');
-                return;
-            }
-            if (password !== confirmPassword) {
-                errorEl.textContent = '⚠️ كلمة المرور غير متطابقة';
-                errorEl.classList.add('show');
-                return;
-            }
-
-            registerBtn.disabled = true;
-            registerBtn.innerHTML = 'جاري إنشاء الحساب... ⏳';
-
-            auth.createUserWithEmailAndPassword(email, password)
-                .then((userCredential) => {
-                    successEl.textContent = '✅ تم إنشاء الحساب بنجاح! جاري تحويلك...';
-                    successEl.classList.add('show');
-                    setTimeout(() => showLogin(), 1500);
-                })
-                .catch((error) => {
-                    let errorMessage = '⚠️ حدث خطأ أثناء إنشاء الحساب';
-                    if (error.code === 'auth/email-already-in-use') {
-                        errorMessage = '⚠️ هذا البريد الإلكتروني مستخدم بالفعل';
-                    } else if (error.code === 'auth/invalid-email') {
-                        errorMessage = '⚠️ البريد الإلكتروني غير صحيح';
-                    } else if (error.code === 'auth/weak-password') {
-                        errorMessage = '⚠️ كلمة المرور ضعيفة. استخدم 6 أحرف على الأقل';
-                    }
-                    errorEl.textContent = errorMessage;
-                    errorEl.classList.add('show');
-                })
-                .finally(() => {
-                    registerBtn.disabled = false;
-                    registerBtn.innerHTML = 'إنشاء حساب ✨';
-                });
-        }
-
-        // ============================================================
-        // إعادة تعيين كلمة المرور
-        // ============================================================
-        function resetPassword() {
-            const email = prompt('📧 أدخل بريدك الإلكتروني لإرسال رابط إعادة التعيين:');
-            if (email && email.includes('@')) {
-                auth.sendPasswordResetEmail(email.trim())
-                    .then(() => {
-                        alert('✅ تم إرسال رابط إعادة التعيين إلى بريدك الإلكتروني');
-                    })
-                    .catch((error) => {
-                        alert('❌ فشل إرسال الرابط: ' + error.message);
-                    });
-            } else if (email) {
-                alert('⚠️ يرجى إدخال بريد إلكتروني صحيح');
-            }
-        }
-
-        // ============================================================
-        // تبديل الشاشات
-        // ============================================================
-        function showRegister() {
-            document.getElementById('loginScreen').style.display = 'none';
-            document.getElementById('registerScreen').style.display = 'flex';
-        }
-
-        function showLogin() {
-            document.getElementById('registerScreen').style.display = 'none';
-            document.getElementById('loginScreen').style.display = 'flex';
-        }
-
-        // ============================================================
-        // تسجيل الخروج
-        // ============================================================
-        function handleLogout() {
-            if (confirm('هل تريد تسجيل الخروج؟')) {
-                auth.signOut()
-                    .then(() => {
-                        console.log('✅ تم تسجيل الخروج');
-                    })
-                    .catch((error) => {
-                        console.error('❌ Logout error:', error);
-                    });
-            }
-        }
-
-        // ============================================================
-        // مراقبة حالة تسجيل الدخول
-        // ============================================================
-        auth.onAuthStateChanged((user) => {
-            const loginScreen = document.getElementById('loginScreen');
-            const registerScreen = document.getElementById('registerScreen');
-            const mainContent = document.getElementById('mainContent');
-            const userEmailDisplay = document.getElementById('userEmailDisplay');
-
-            if (user) {
-                loginScreen.style.display = 'none';
-                registerScreen.style.display = 'none';
-                mainContent.style.display = 'block';
-                if (userEmailDisplay) {
-                    userEmailDisplay.textContent = user.displayName || user.email || 'مستخدم';
-                }
-            } else {
-                loginScreen.style.display = 'flex';
-                registerScreen.style.display = 'none';
-                mainContent.style.display = 'none';
-            }
-        });
-
-        // ============================================================
-        // عند تحميل الصفحة
-        // ============================================================
-        document.addEventListener('DOMContentLoaded', function() {
-            const origin = window.location.origin;
-            console.log('✅ الصفحة جاهزة!');
-            console.log('🌐 الرابط الحالي:', origin);
-            
-            // عرض الرابط الحالي
-            document.getElementById('currentOrigin').textContent = origin;
-            
-            // إذا كان الملف يعمل من file://، اعرض تحذير
-            if (origin === 'file://' || origin.startsWith('file://')) {
-                document.getElementById('domainInfo').style.background = '#f8d7da';
-                document.getElementById('domainInfo').style.borderColor = '#f5c6cb';
-                document.getElementById('domainInfo').style.color = '#721c24';
-                document.getElementById('domainInfo').innerHTML = 
-                    '⚠️ <strong>تحذير:</strong> أنت تشغل الملف من <code>file://</code><br>' +
-                    'يرجى رفع الملف على GitHub Pages أو استخدام Live Server';
-            }
-        });
     </script>
+
+    <!-- تحميل Google SDK -->
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
 </body>
 </html>
