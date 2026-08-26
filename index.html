@@ -237,6 +237,7 @@
             flex-direction: column;
             gap: 8px;
         }
+
         .google-signin-wrapper .divider-text {
             color: #94a3b8;
             font-size: 13px;
@@ -245,6 +246,7 @@
             gap: 12px;
             width: 100%;
         }
+
         .google-signin-wrapper .divider-text::before,
         .google-signin-wrapper .divider-text::after {
             content: '';
@@ -252,6 +254,7 @@
             height: 1px;
             background: #e2e8f0;
         }
+
         #g_id_signin {
             display: flex;
             justify-content: center;
@@ -2101,14 +2104,6 @@
                  data-logo_alignment="left">
             </div>
 
-            <!-- عرض بيانات المستخدم بعد تسجيل الدخول -->
-            <div id="userInfo" style="display:none; margin-top:20px; padding:15px; background:#f8fafc; border-radius:12px;">
-                <img id="userPicture" src="" width="50" height="50" style="border-radius:50%; margin-bottom:10px;">
-                <p id="userName" style="font-weight:bold; color:#1a1a2e;"></p>
-                <p id="userEmail" style="color:#64748b; font-size:14px;"></p>
-                <button onclick="logout()" style="margin-top:10px; padding:8px 20px; background:#dc2626; color:white; border:none; border-radius:8px; cursor:pointer; font-weight:bold;">🚪 تسجيل الخروج</button>
-            </div>
-
             <div class="divider" style="display:flex; align-items:center; margin:20px 0; color:#94a3b8;">
                 <span style="padding:0 15px; font-size:13px;">أو</span>
             </div>
@@ -2512,7 +2507,7 @@
         console.log('✅ Forminit initialized with FORM_ID:', FORM_ID);
 
         // ============================================================
-        // 4. Google Sign-In - دالة معالجة الاستجابة
+        // 4. Google Sign-In - ✅ دالة معالجة الاستجابة (تسجيل دخول فوري)
         // ============================================================
         function handleCredentialResponse(response) {
             console.log("✅ تم تسجيل الدخول بنجاح!");
@@ -2523,32 +2518,34 @@
                 const payload = JSON.parse(atob(response.credential.split('.')[1]));
                 console.log("👤 بيانات المستخدم:", payload);
 
-                // عرض البيانات في الصفحة
-                document.getElementById('userPicture').src = payload.picture;
-                document.getElementById('userName').textContent = "👤 " + payload.name;
-                document.getElementById('userEmail').textContent = "📧 " + payload.email;
-                document.getElementById('userInfo').style.display = 'block';
-
-                // إخفاء زر تسجيل الدخول
-                document.querySelector('.g_id_signin').style.display = 'none';
-
-                // تخزين البيانات
-                localStorage.setItem('user', JSON.stringify(payload));
-
-                // تسجيل الدخول عبر Firebase باستخدام التوكن
+                // ✅ تسجيل الدخول عبر Firebase باستخدام التوكن
                 const credential = firebase.auth.GoogleAuthProvider.credential(response.credential);
                 auth.signInWithCredential(credential)
                     .then((result) => {
                         console.log('✅ Firebase Sign-In successful:', result.user);
-                        document.getElementById('loginSuccess').textContent = '✅ مرحباً ' + (result.user.displayName || result.user.email) + '!';
-                        document.getElementById('loginSuccess').classList.add('show');
+                        
+                        // ✅ إخفاء شاشة تسجيل الدخول فوراً وعرض المتجر
+                        document.getElementById('loginScreen').classList.add('hidden');
+                        document.getElementById('mainContent').style.display = 'block';
+                        
+                        // ✅ عرض اسم المستخدم في الهيدر
+                        document.getElementById('userEmailDisplay').textContent = result.user.displayName || result.user.email;
+                        
+                        // ✅ عرض المنتجات
+                        displayProducts(allProducts);
+                        updateCartIconCount();
+                        showNotification('✅ مرحباً ' + (result.user.displayName || result.user.email) + '!', 'success');
                     })
                     .catch((error) => {
                         console.error('❌ Firebase Sign-In error:', error);
+                        document.getElementById('loginError').textContent = '⚠️ فشل تسجيل الدخول: ' + error.message;
+                        document.getElementById('loginError').classList.add('show');
                     });
 
             } catch (e) {
                 console.error("❌ خطأ في فك التشفير:", e);
+                document.getElementById('loginError').textContent = '⚠️ حدث خطأ أثناء معالجة البيانات';
+                document.getElementById('loginError').classList.add('show');
             }
         }
 
@@ -2557,28 +2554,11 @@
         // ============================================================
         function logout() {
             localStorage.removeItem('user');
-            document.getElementById('userInfo').style.display = 'none';
-            document.querySelector('.g_id_signin').style.display = 'block';
             auth.signOut();
         }
 
         // ============================================================
-        // 6. التحقق من وجود جلسة سابقة
-        // ============================================================
-        window.onload = function() {
-            const userData = localStorage.getItem('user');
-            if (userData) {
-                const payload = JSON.parse(userData);
-                document.getElementById('userPicture').src = payload.picture;
-                document.getElementById('userName').textContent = "👤 " + payload.name;
-                document.getElementById('userEmail').textContent = "📧 " + payload.email;
-                document.getElementById('userInfo').style.display = 'block';
-                document.querySelector('.g_id_signin').style.display = 'none';
-            }
-        };
-
-        // ============================================================
-        // 7. بيانات المنتجات
+        // 6. بيانات المنتجات
         // ============================================================
         const allProducts = [
             {
@@ -2626,7 +2606,7 @@
         ];
 
         // ============================================================
-        // 8. المتغيرات العامة
+        // 7. المتغيرات العامة
         // ============================================================
         let cart = JSON.parse(localStorage.getItem('cart')) || [];
         let autoRotateIntervals = {};
@@ -2639,7 +2619,7 @@
         let detailSelectedSize = null;
 
         // ============================================================
-        // 9. دوال المصادقة
+        // 8. دوال المصادقة
         // ============================================================
 
         function handleLogin() {
@@ -2828,7 +2808,7 @@
                 auth.signOut()
                     .then(() => {
                         showNotification('👋 تم تسجيل الخروج');
-                        logout(); // تسجيل الخروج من Google أيضاً
+                        logout();
                     })
                     .catch((error) => {
                         console.error('❌ Logout error:', error);
@@ -2844,10 +2824,9 @@
             if (user) {
                 loginScreen.classList.add('hidden');
                 mainContent.style.display = 'block';
-                if (userEmailDisplay) userEmailDisplay.textContent = user.email;
+                if (userEmailDisplay) userEmailDisplay.textContent = user.displayName || user.email;
                 displayProducts(allProducts);
                 updateCartIconCount();
-                showNotification('✅ مرحباً بك في متجر Takamul');
             } else {
                 loginScreen.classList.remove('hidden');
                 mainContent.style.display = 'none';
@@ -2883,7 +2862,7 @@
         }
 
         // ============================================================
-        // 10. دوال المتجر
+        // 9. دوال المتجر
         // ============================================================
 
         function showAboutModal(e) {
@@ -2957,7 +2936,7 @@
         }
 
         // ============================================================
-        // 11. الجزء المعدل لحل مشكلة "Form Deleted"
+        // 10. الجزء المعدل لحل مشكلة "Form Deleted"
         // ============================================================
         async function sendOrderViaForminit(formData) {
             try {
@@ -3063,7 +3042,7 @@
         }
 
         // ============================================================
-        // 12. دوال عرض المنتجات
+        // 11. دوال عرض المنتجات
         // ============================================================
         function displayProducts(productsToDisplay) {
             const container = document.getElementById('productsContainer');
@@ -3222,7 +3201,7 @@
         }
 
         // ============================================================
-        // 13. دوال صفحة تفاصيل المنتج
+        // 12. دوال صفحة تفاصيل المنتج
         // ============================================================
         function openProductDetails(productId) {
             const product = allProducts.find(p => p.id === productId);
@@ -3272,7 +3251,7 @@
         }
 
         // ============================================================
-        // 14. Forminit - نموذج التواصل في المودال
+        // 13. Forminit - نموذج التواصل في المودال
         // ============================================================
         const contactForm = document.getElementById('contactForm');
         const contactStatus = document.getElementById('contactStatus');
@@ -3308,7 +3287,7 @@
         }
 
         // ============================================================
-        // 15. ربط الأحداث عند تحميل الصفحة
+        // 14. ربط الأحداث عند تحميل الصفحة
         // ============================================================
         document.addEventListener('DOMContentLoaded', function () {
             window.addEventListener('scroll', () => {
