@@ -164,6 +164,42 @@
             margin: 10px 0;
         }
 
+        /* ===== Setup Instructions ===== */
+        .setup-instructions {
+            background: #fef3c7;
+            border: 1px solid #f59e0b;
+            border-radius: 12px;
+            padding: 15px;
+            margin-top: 15px;
+            text-align: right;
+            display: none;
+        }
+
+        .setup-instructions.show {
+            display: block;
+        }
+
+        .setup-instructions h4 {
+            color: #92400e;
+            margin-bottom: 8px;
+        }
+
+        .setup-instructions p {
+            color: #78350f;
+            font-size: 13px;
+            line-height: 1.8;
+        }
+
+        .setup-instructions code {
+            background: #fff;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            color: #1a1a2e;
+            direction: ltr;
+            display: inline-block;
+        }
+
         /* ===== الهيدر ===== */
         header {
             position: sticky;
@@ -1574,10 +1610,31 @@
             <div id="loginError" class="login-error"></div>
             <div id="loginSuccess" class="login-success"></div>
 
+            <!-- ===== تعليمات الإعداد ===== -->
+            <div class="setup-instructions" id="setupInstructions">
+                <h4>⚠️ خطأ في تسجيل الدخول؟</h4>
+                <p>
+                    <strong>لإعداد Google Sign-In بشكل صحيح:</strong><br><br>
+                    1️⃣ اذهب إلى <a href="https://console.cloud.google.com/" target="_blank" style="color:#059669;">Google Cloud Console</a><br>
+                    2️⃣ اختر مشروعك <code>takamul-c419c</code><br>
+                    3️⃣ من القائمة الجانبية: <strong>APIs & Services → Credentials</strong><br>
+                    4️⃣ ابحث عن OAuth 2.0 Client ID الخاص بك<br>
+                    5️⃣ أضف هذه <strong>Authorized redirect URIs</strong>:<br>
+                    <code>https://takamul-c419c.firebaseapp.com/__/auth/handler</code><br>
+                    <code>http://localhost</code><br>
+                    6️⃣ أضف <strong>Authorized JavaScript origins</strong>:<br>
+                    <code>http://localhost</code><br>
+                    <code>https://takamul-c419c.firebaseapp.com</code><br>
+                    7️⃣ في Firebase Console → Authentication → Sign-in methods → Google (مفعّل)
+                </p>
+            </div>
+
             <div style="margin-top: 25px; color: #94a3b8; font-size: 13px;">
                 <a href="#" onclick="showPrivacyPolicy(event)" style="color: #059669; text-decoration: none;">سياسة الخصوصية</a>
                 &nbsp;|&nbsp;
                 <a href="#" onclick="showAboutModal(event)" style="color: #059669; text-decoration: none;">من نحن</a>
+                &nbsp;|&nbsp;
+                <a href="#" onclick="toggleSetupInstructions(event)" style="color: #f59e0b; text-decoration: none;">⚠️ إعدادات Google</a>
             </div>
         </div>
     </div>
@@ -1853,16 +1910,22 @@
                         document.getElementById('loginSuccess').textContent = '✅ مرحباً ' + (result.user.displayName || result.user.email) + '!';
                         document.getElementById('loginSuccess').classList.add('show');
                         document.getElementById('loginError').classList.remove('show');
+                        document.getElementById('setupInstructions').classList.remove('show');
                         showNotification('👋 مرحباً بك ' + (result.user.displayName || result.user.email));
                     })
                     .catch((error) => {
                         console.error('❌ خطأ Firebase:', error);
                         let errorMessage = '⚠️ فشل تسجيل الدخول عبر Google';
+
                         if (error.code === 'auth/account-exists-with-different-credential') {
                             errorMessage = '⚠️ هذا البريد الإلكتروني مسجل بطريقة أخرى.';
                         } else if (error.code === 'auth/popup-closed-by-user') {
                             errorMessage = '⚠️ تم إغلاق النافذة. حاول مرة أخرى.';
+                        } else if (error.code === 'auth/unauthorized-domain') {
+                            errorMessage = '⚠️ النطاق غير مصرح به. أضف النطاق في Firebase Console.';
+                            document.getElementById('setupInstructions').classList.add('show');
                         }
+
                         document.getElementById('loginError').textContent = errorMessage;
                         document.getElementById('loginError').classList.add('show');
                     });
@@ -1875,7 +1938,16 @@
         }
 
         // ============================================================
-        // 5. تسجيل الخروج
+        // 5. عرض تعليمات الإعداد
+        // ============================================================
+        function toggleSetupInstructions(e) {
+            if (e) e.preventDefault();
+            const el = document.getElementById('setupInstructions');
+            el.classList.toggle('show');
+        }
+
+        // ============================================================
+        // 6. تسجيل الخروج
         // ============================================================
         function handleLogout() {
             if (confirm('هل تريد تسجيل الخروج؟')) {
@@ -1890,7 +1962,7 @@
         }
 
         // ============================================================
-        // 6. مراقبة حالة المصادقة
+        // 7. مراقبة حالة المصادقة
         // ============================================================
         auth.onAuthStateChanged((user) => {
             const loginScreen = document.getElementById('loginScreen');
@@ -1916,7 +1988,7 @@
         });
 
         // ============================================================
-        // 7. دوال المودالات
+        // 8. دوال المودالات
         // ============================================================
         function showAboutModal(e) {
             if (e) e.preventDefault();
@@ -1944,7 +2016,7 @@
         });
 
         // ============================================================
-        // 8. بيانات المنتجات
+        // 9. بيانات المنتجات
         // ============================================================
         const allProducts = [{
                 id: 1,
@@ -2061,14 +2133,14 @@
         ];
 
         // ============================================================
-        // 9. المتغيرات العامة
+        // 10. المتغيرات العامة
         // ============================================================
         let cart = JSON.parse(localStorage.getItem('cart')) || [];
         let currentCategory = 'all';
         let currentDetailProductId = null;
 
         // ============================================================
-        // 10. دوال المتجر
+        // 11. دوال المتجر
         // ============================================================
 
         function cleanName(name) {
@@ -2129,7 +2201,7 @@
         }
 
         // ============================================================
-        // 11. إرسال الطلب
+        // 12. إرسال الطلب
         // ============================================================
         async function sendOrderViaForminit(formData) {
             try {
@@ -2233,7 +2305,7 @@
         }
 
         // ============================================================
-        // 12. دوال عرض المنتجات
+        // 13. دوال عرض المنتجات
         // ============================================================
         function displayProducts(productsToDisplay) {
             const container = document.getElementById('productsContainer');
@@ -2388,7 +2460,7 @@
         }
 
         // ============================================================
-        // 13. دوال صفحة تفاصيل المنتج
+        // 14. دوال صفحة تفاصيل المنتج
         // ============================================================
         function openProductDetails(productId) {
             const product = allProducts.find(p => p.id === productId);
@@ -2443,7 +2515,7 @@
         }
 
         // ============================================================
-        // 14. Forminit - نموذج التواصل
+        // 15. Forminit - نموذج التواصل
         // ============================================================
         const contactForm = document.getElementById('contactForm');
         const contactStatus = document.getElementById('contactStatus');
@@ -2472,7 +2544,7 @@
         }
 
         // ============================================================
-        // 15. ربط الأحداث
+        // 16. ربط الأحداث
         // ============================================================
         document.addEventListener('DOMContentLoaded', function() {
             window.addEventListener('scroll', () => {
