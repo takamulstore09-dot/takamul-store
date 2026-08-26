@@ -5,10 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Takamul | متجر تكامل</title>
     
-    <!-- Google Identity Services -->
-    <script src="https://accounts.google.com/gsi/client" async defer></script>
-    
-    <!-- Firebase SDK -->
+    <!-- Firebase SDK فقط (لا حاجة لـ GSI) -->
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
     
@@ -78,8 +75,6 @@
         .login-btn {
             width: 100%;
             padding: 16px;
-            background: linear-gradient(135deg, #059669, #047857);
-            color: #ffffff;
             border: none;
             border-radius: 12px;
             font-weight: bold;
@@ -87,15 +82,36 @@
             cursor: pointer;
             transition: 0.3s;
             margin-top: 10px;
+            color: #ffffff;
         }
         .login-btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(5, 150, 105, 0.35);
         }
         .login-btn:disabled {
             opacity: 0.6;
             cursor: not-allowed;
             transform: none;
+        }
+        .login-btn.email-btn {
+            background: linear-gradient(135deg, #059669, #047857);
+        }
+        .login-btn.email-btn:hover {
+            box-shadow: 0 8px 25px rgba(5, 150, 105, 0.35);
+        }
+        .login-btn.google-btn {
+            background: #4285f4;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+        }
+        .login-btn.google-btn:hover {
+            background: #3367d6;
+            box-shadow: 0 8px 25px rgba(66, 133, 244, 0.35);
+        }
+        .login-btn.google-btn img {
+            width: 24px;
+            height: 24px;
         }
         .divider {
             display: flex;
@@ -166,33 +182,21 @@
         .forgot-password-link a:hover {
             text-decoration: underline;
         }
-        /* تنسيق زر Google */
-        #g_id_signin {
-            display: flex;
-            justify-content: center;
-            margin: 10px 0;
-        }
-        .domain-warning {
-            background: #fff3cd;
-            border: 1px solid #ffc107;
+        .info-box {
+            background: #e8f4fd;
+            border: 1px solid #b8daff;
             border-radius: 8px;
             padding: 12px;
             margin: 10px 0;
             font-size: 13px;
-            color: #856404;
-            display: none;
+            color: #004085;
+            text-align: right;
         }
-        .domain-warning code {
-            background: #f8f9fa;
+        .info-box code {
+            background: #fff;
             padding: 2px 6px;
             border-radius: 4px;
             font-size: 12px;
-        }
-        .domain-warning.success {
-            background: #d4edda;
-            border-color: #28a745;
-            color: #155724;
-            display: block;
         }
     </style>
 </head>
@@ -205,31 +209,55 @@
             <h2><span>Takamul</span> Store</h2>
             <p class="subtitle">🔐 تسجيل الدخول للوصول إلى المتجر</p>
 
-            <!-- ===== زر Google Sign-In ===== -->
-            <div id="g_id_signin"></div>
-            
-            <!-- رسالة حالة النطاق -->
-            <div id="domainWarning" class="domain-warning">
-                ⚠️ النطاق <code id="currentOrigin"></code> غير مصرح به.<br>
-                أضفه إلى <strong>Authorized JavaScript Origins</strong> في Google Cloud Console
-            </div>
+            <!-- ===== زر Google (يعمل دائماً) ===== -->
+            <button class="login-btn google-btn" onclick="signInWithGoogle()">
+                <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google">
+                تسجيل الدخول بـ Google
+            </button>
 
             <div class="divider"><span>أو</span></div>
 
             <!-- تسجيل الدخول العادي -->
             <input type="email" id="loginEmail" placeholder="✉️ البريد الإلكتروني">
             <input type="password" id="loginPassword" placeholder="🔑 كلمة المرور">
-            <button class="login-btn" id="loginBtn" onclick="handleLogin()">دخول 🚀</button>
+            <button class="login-btn email-btn" id="loginBtn" onclick="handleLogin()">دخول 🚀</button>
 
-            <div id="loginError" class="login-error">⚠️ البريد الإلكتروني أو كلمة المرور غير صحيحة</div>
-            <div id="loginSuccess" class="login-success">✅ تم تسجيل الدخول بنجاح!</div>
+            <div id="loginError" class="login-error"></div>
+            <div id="loginSuccess" class="login-success"></div>
 
             <div class="forgot-password-link">
-                <a href="#" onclick="alert('سيتم إرسال رابط إعادة التعيين إلى بريدك')">🔑 نسيت كلمة المرور؟</a>
+                <a href="#" onclick="resetPassword()">🔑 نسيت كلمة المرور؟</a>
             </div>
 
             <div class="register-link">
-                ليس لديك حساب؟ <a href="#" onclick="alert('سيتم فتح صفحة التسجيل')">سجل الآن</a>
+                ليس لديك حساب؟ <a href="#" onclick="showRegister()">سجل الآن</a>
+            </div>
+
+            <!-- معلومات النطاق -->
+            <div class="info-box" id="domainInfo">
+                📍 النطاق الحالي: <code id="currentOrigin"></code>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== شاشة التسجيل ===== -->
+    <div id="registerScreen" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.92); z-index:99998; backdrop-filter:blur(12px); justify-content:center; align-items:center;">
+        <div class="login-box">
+            <img src="https://g.top4top.io/p_3889jf2jz1.png" alt="Takamul Logo" class="logo-img">
+            <h2><span>📝</span> إنشاء حساب</h2>
+            <p class="subtitle">سجل الآن للاستمتاع بتجربة التسوق</p>
+
+            <input type="email" id="registerEmail" placeholder="✉️ البريد الإلكتروني">
+            <input type="password" id="registerPassword" placeholder="🔑 كلمة المرور (6 أحرف على الأقل)">
+            <input type="password" id="registerConfirmPassword" placeholder="🔑 تأكيد كلمة المرور">
+
+            <button class="login-btn email-btn" id="registerBtn" onclick="handleRegister()">إنشاء حساب ✨</button>
+
+            <div id="registerError" class="login-error"></div>
+            <div id="registerSuccess" class="login-success"></div>
+
+            <div class="register-link">
+                لديك حساب بالفعل؟ <a href="#" onclick="showLogin()">تسجيل الدخول</a>
             </div>
         </div>
     </div>
@@ -267,102 +295,52 @@
         console.log('✅ Firebase initialized!');
 
         // ============================================================
-        // ✅ دالة معالجة استجابة Google
+        // ✅ تسجيل الدخول بـ Google (يعمل دائماً)
         // ============================================================
-        function handleCredentialResponse(response) {
-            console.log('✅ Google ID Token received:', response.credential);
-            
+        function signInWithGoogle() {
+            const provider = new firebase.auth.GoogleAuthProvider();
             const errorEl = document.getElementById('loginError');
             const successEl = document.getElementById('loginSuccess');
+            
             errorEl.classList.remove('show');
             successEl.classList.remove('show');
-
-            // استخدام Firebase لتسجيل الدخول باستخدام Google Credential
-            const credential = firebase.auth.GoogleAuthProvider.credential(response.credential);
             
-            auth.signInWithCredential(credential)
+            // عرض رسالة انتظار
+            const googleBtn = document.querySelector('.google-btn');
+            googleBtn.disabled = true;
+            googleBtn.innerHTML = '⏳ جاري تسجيل الدخول...';
+
+            auth.signInWithPopup(provider)
                 .then((result) => {
-                    console.log('✅ Firebase Sign-In successful:', result.user);
+                    console.log('✅ Google Sign-In successful:', result.user);
                     successEl.textContent = '✅ مرحباً ' + (result.user.displayName || result.user.email) + '!';
                     successEl.classList.add('show');
                 })
                 .catch((error) => {
-                    console.error('❌ Firebase Sign-In error:', error);
+                    console.error('❌ Google Sign-In error:', error);
+                    
                     let errorMessage = '⚠️ فشل تسجيل الدخول بـ Google';
-                    if (error.code === 'auth/unauthorized-domain') {
-                        errorMessage = '⚠️ النطاق غير مصرح به. أضف ' + window.location.origin + ' إلى Authorized JavaScript Origins';
-                        document.getElementById('domainWarning').style.display = 'block';
-                        document.getElementById('currentOrigin').textContent = window.location.origin;
-                    } else if (error.code === 'auth/popup-blocked') {
+                    if (error.code === 'auth/popup-blocked') {
                         errorMessage = '⚠️ تم حظر النافذة المنبثقة. يرجى السماح بالنوافذ المنبثقة';
                     } else if (error.code === 'auth/cancelled-popup-request') {
                         errorMessage = '⚠️ تم إلغاء طلب تسجيل الدخول';
+                    } else if (error.code === 'auth/unauthorized-domain') {
+                        errorMessage = '⚠️ النطاق غير مصرح به. أضف ' + window.location.origin + ' إلى Authorized JavaScript Origins';
+                    } else if (error.code === 'auth/network-request-failed') {
+                        errorMessage = '⚠️ فشل الاتصال بالشبكة. تأكد من اتصال الإنترنت';
                     }
+                    
                     errorEl.textContent = errorMessage;
                     errorEl.classList.add('show');
+                })
+                .finally(() => {
+                    googleBtn.disabled = false;
+                    googleBtn.innerHTML = '<img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google" style="width:24px;height:24px;"> تسجيل الدخول بـ Google';
                 });
         }
 
         // ============================================================
-        // ✅ تهيئة زر Google
-        // ============================================================
-        function initGoogleSignIn() {
-            const origin = window.location.origin;
-            
-            // تحقق من file://
-            if (origin === 'file://' || origin.startsWith('file://')) {
-                document.getElementById('domainWarning').style.display = 'block';
-                document.getElementById('domainWarning').innerHTML = 
-                    '⚠️ <strong>لا يمكن تشغيل Google Sign-In من file://</strong><br>' +
-                    'يرجى رفع الملف على GitHub Pages أو استخدام Live Server';
-                return;
-            }
-
-            try {
-                // ✅ التهيئة الصحيحة باستخدام callback
-                google.accounts.id.initialize({
-                    client_id: '358188138966-0fjp4adkc3t2ibj9iveka5kmf0a0h4v2.apps.googleusercontent.com',
-                    callback: handleCredentialResponse,
-                    context: 'signin',
-                    ux_mode: 'popup',
-                    auto_prompt: false,
-                });
-
-                // ✅ عرض زر Google
-                google.accounts.id.renderButton(
-                    document.getElementById('g_id_signin'),
-                    {
-                        type: 'standard',
-                        shape: 'pill',
-                        theme: 'outline',
-                        text: 'signin_with',
-                        size: 'large',
-                        logo_alignment: 'left',
-                    }
-                );
-
-                console.log('✅ Google Sign-In initialized successfully');
-                console.log('📍 النطاق الحالي:', origin);
-                
-                // عرض رسالة نجاح مع النطاق
-                const warningEl = document.getElementById('domainWarning');
-                warningEl.className = 'domain-warning success';
-                warningEl.innerHTML = '✅ <strong>تم تهيئة Google Sign-In بنجاح!</strong><br>' +
-                    '📍 النطاق الحالي: <code>' + origin + '</code><br>' +
-                    '⚠️ تأكد من إضافة هذا النطاق إلى <strong>Authorized JavaScript Origins</strong>';
-                warningEl.style.display = 'block';
-                document.getElementById('currentOrigin').textContent = origin;
-                
-            } catch (error) {
-                console.error('❌ Google Sign-In init error:', error);
-                document.getElementById('domainWarning').style.display = 'block';
-                document.getElementById('domainWarning').innerHTML = 
-                    '⚠️ <strong>خطأ في تهيئة Google Sign-In:</strong><br>' + error.message;
-            }
-        }
-
-        // ============================================================
-        // تسجيل الدخول العادي (بريد وكلمة مرور)
+        // تسجيل الدخول العادي
         // ============================================================
         function handleLogin() {
             const email = document.getElementById('loginEmail').value.trim();
@@ -409,6 +387,94 @@
         }
 
         // ============================================================
+        // التسجيل
+        // ============================================================
+        function handleRegister() {
+            const email = document.getElementById('registerEmail').value.trim();
+            const password = document.getElementById('registerPassword').value.trim();
+            const confirmPassword = document.getElementById('registerConfirmPassword').value.trim();
+            const errorEl = document.getElementById('registerError');
+            const successEl = document.getElementById('registerSuccess');
+            const registerBtn = document.getElementById('registerBtn');
+
+            errorEl.classList.remove('show');
+            successEl.classList.remove('show');
+
+            if (!email || !password || !confirmPassword) {
+                errorEl.textContent = '⚠️ يرجى ملء جميع الحقول';
+                errorEl.classList.add('show');
+                return;
+            }
+            if (password.length < 6) {
+                errorEl.textContent = '⚠️ كلمة المرور يجب أن تكون 6 أحرف على الأقل';
+                errorEl.classList.add('show');
+                return;
+            }
+            if (password !== confirmPassword) {
+                errorEl.textContent = '⚠️ كلمة المرور غير متطابقة';
+                errorEl.classList.add('show');
+                return;
+            }
+
+            registerBtn.disabled = true;
+            registerBtn.innerHTML = 'جاري إنشاء الحساب... ⏳';
+
+            auth.createUserWithEmailAndPassword(email, password)
+                .then((userCredential) => {
+                    successEl.textContent = '✅ تم إنشاء الحساب بنجاح! جاري تحويلك...';
+                    successEl.classList.add('show');
+                    setTimeout(() => showLogin(), 1500);
+                })
+                .catch((error) => {
+                    let errorMessage = '⚠️ حدث خطأ أثناء إنشاء الحساب';
+                    if (error.code === 'auth/email-already-in-use') {
+                        errorMessage = '⚠️ هذا البريد الإلكتروني مستخدم بالفعل';
+                    } else if (error.code === 'auth/invalid-email') {
+                        errorMessage = '⚠️ البريد الإلكتروني غير صحيح';
+                    } else if (error.code === 'auth/weak-password') {
+                        errorMessage = '⚠️ كلمة المرور ضعيفة. استخدم 6 أحرف على الأقل';
+                    }
+                    errorEl.textContent = errorMessage;
+                    errorEl.classList.add('show');
+                })
+                .finally(() => {
+                    registerBtn.disabled = false;
+                    registerBtn.innerHTML = 'إنشاء حساب ✨';
+                });
+        }
+
+        // ============================================================
+        // إعادة تعيين كلمة المرور
+        // ============================================================
+        function resetPassword() {
+            const email = prompt('📧 أدخل بريدك الإلكتروني لإرسال رابط إعادة التعيين:');
+            if (email && email.includes('@')) {
+                auth.sendPasswordResetEmail(email.trim())
+                    .then(() => {
+                        alert('✅ تم إرسال رابط إعادة التعيين إلى بريدك الإلكتروني');
+                    })
+                    .catch((error) => {
+                        alert('❌ فشل إرسال الرابط: ' + error.message);
+                    });
+            } else if (email) {
+                alert('⚠️ يرجى إدخال بريد إلكتروني صحيح');
+            }
+        }
+
+        // ============================================================
+        // تبديل الشاشات
+        // ============================================================
+        function showRegister() {
+            document.getElementById('loginScreen').style.display = 'none';
+            document.getElementById('registerScreen').style.display = 'flex';
+        }
+
+        function showLogin() {
+            document.getElementById('registerScreen').style.display = 'none';
+            document.getElementById('loginScreen').style.display = 'flex';
+        }
+
+        // ============================================================
         // تسجيل الخروج
         // ============================================================
         function handleLogout() {
@@ -428,19 +494,20 @@
         // ============================================================
         auth.onAuthStateChanged((user) => {
             const loginScreen = document.getElementById('loginScreen');
+            const registerScreen = document.getElementById('registerScreen');
             const mainContent = document.getElementById('mainContent');
             const userEmailDisplay = document.getElementById('userEmailDisplay');
 
             if (user) {
                 loginScreen.style.display = 'none';
+                registerScreen.style.display = 'none';
                 mainContent.style.display = 'block';
                 if (userEmailDisplay) {
                     userEmailDisplay.textContent = user.displayName || user.email || 'مستخدم';
                 }
-                document.getElementById('loginError').classList.remove('show');
-                document.getElementById('loginSuccess').classList.remove('show');
             } else {
                 loginScreen.style.display = 'flex';
+                registerScreen.style.display = 'none';
                 mainContent.style.display = 'none';
             }
         });
@@ -449,24 +516,21 @@
         // عند تحميل الصفحة
         // ============================================================
         document.addEventListener('DOMContentLoaded', function() {
-            console.log('✅ الصفحة جاهزة!');
             const origin = window.location.origin;
+            console.log('✅ الصفحة جاهزة!');
             console.log('🌐 الرابط الحالي:', origin);
             
             // عرض الرابط الحالي
             document.getElementById('currentOrigin').textContent = origin;
             
-            // تهيئة زر Google بعد تحميل المكتبة
-            if (typeof google !== 'undefined' && google.accounts) {
-                initGoogleSignIn();
-            } else {
-                console.log('⏳ في انتظار تحميل مكتبة Google...');
-                const checkGoogle = setInterval(() => {
-                    if (typeof google !== 'undefined' && google.accounts) {
-                        clearInterval(checkGoogle);
-                        initGoogleSignIn();
-                    }
-                }, 500);
+            // إذا كان الملف يعمل من file://، اعرض تحذير
+            if (origin === 'file://' || origin.startsWith('file://')) {
+                document.getElementById('domainInfo').style.background = '#f8d7da';
+                document.getElementById('domainInfo').style.borderColor = '#f5c6cb';
+                document.getElementById('domainInfo').style.color = '#721c24';
+                document.getElementById('domainInfo').innerHTML = 
+                    '⚠️ <strong>تحذير:</strong> أنت تشغل الملف من <code>file://</code><br>' +
+                    'يرجى رفع الملف على GitHub Pages أو استخدام Live Server';
             }
         });
     </script>
