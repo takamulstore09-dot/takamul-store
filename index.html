@@ -881,6 +881,11 @@
             font-weight: 600;
         }
 
+        .cart-item-info .cart-item-size {
+            font-size: 12px;
+            color: #64748b;
+        }
+
         .cart-item-info .cart-item-price {
             color: #1a1a2e;
             font-weight: 800;
@@ -1254,6 +1259,105 @@
             font-size: 14px;
         }
 
+        /* ===== اختيار المقاس في المنتج ===== */
+        .size-selector {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin: 8px 0 10px;
+        }
+
+        .size-selector .size-option {
+            padding: 6px 14px;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            background: #fff;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 13px;
+            transition: 0.3s;
+            color: #1a1a2e;
+        }
+
+        .size-selector .size-option:hover {
+            border-color: #059669;
+            background: rgba(5, 150, 105, 0.05);
+        }
+
+        .size-selector .size-option.selected {
+            border-color: #059669;
+            background: #059669;
+            color: #fff;
+        }
+
+        .size-selector .size-option.disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+
+        .color-selector {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin: 6px 0 10px;
+        }
+
+        .color-selector .color-option {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            border: 2px solid #e2e8f0;
+            cursor: pointer;
+            transition: 0.3s;
+            position: relative;
+        }
+
+        .color-selector .color-option:hover {
+            transform: scale(1.1);
+        }
+
+        .color-selector .color-option.selected {
+            border-color: #059669;
+            box-shadow: 0 0 0 3px rgba(5, 150, 105, 0.3);
+        }
+
+        .color-selector .color-option .color-tooltip {
+            display: none;
+            position: absolute;
+            bottom: -28px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #1a1a2e;
+            color: #fff;
+            padding: 2px 10px;
+            border-radius: 4px;
+            font-size: 10px;
+            white-space: nowrap;
+        }
+
+        .color-selector .color-option:hover .color-tooltip {
+            display: block;
+        }
+
+        .size-label {
+            font-size: 13px;
+            font-weight: 600;
+            color: #1a1a2e;
+            margin-bottom: 4px;
+            display: block;
+        }
+
+        .size-error {
+            color: #dc2626;
+            font-size: 12px;
+            margin-top: 4px;
+            display: none;
+        }
+
+        .size-error.show {
+            display: block;
+        }
+
         /* ===== التجاوب ===== */
         @media(max-width: 992px) {
             #productsContainer {
@@ -1542,13 +1646,12 @@
             </div>
         </header>
 
-        <!-- ===== شريط التصنيفات - كل قسم له سهم والقائمة المنسدلة ===== -->
+        <!-- ===== شريط التصنيفات ===== -->
         <nav class="amazon-nav" id="categoriesBar">
             <div class="nav-item active" data-category="all" onclick="filterProducts('all')">
                 ☰ الكل
             </div>
-            
-            <!-- قسم ملابس -->
+
             <div class="nav-item" data-category="ملابس" onclick="filterProducts('ملابس')">
                 👕 ملابس
                 <span class="arrow">▼</span>
@@ -1563,7 +1666,6 @@
                 </div>
             </div>
 
-            <!-- قسم إلكترونيات -->
             <div class="nav-item" data-category="إلكترونيات" onclick="filterProducts('إلكترونيات')">
                 💻 إلكترونيات
                 <span class="arrow">▼</span>
@@ -1578,7 +1680,6 @@
                 </div>
             </div>
 
-            <!-- قسم منزل - يحتوي على الموازين كفئة فرعية -->
             <div class="nav-item" data-category="منزل" onclick="filterProducts('منزل')">
                 🏠 منزل ومطبخ
                 <span class="arrow">▼</span>
@@ -1593,7 +1694,6 @@
                 </div>
             </div>
 
-            <!-- قسم جمال -->
             <div class="nav-item" data-category="جمال" onclick="filterProducts('جمال')">
                 💄 جمال وعناية
                 <span class="arrow">▼</span>
@@ -1606,7 +1706,6 @@
                 </div>
             </div>
 
-            <!-- قسم أطفال -->
             <div class="nav-item" data-category="أطفال" onclick="filterProducts('أطفال')">
                 🧸 أطفال
                 <span class="arrow">▼</span>
@@ -1619,7 +1718,6 @@
                 </div>
             </div>
 
-            <!-- قسم رياضة -->
             <div class="nav-item" data-category="رياضة" onclick="filterProducts('رياضة')">
                 ⚽ رياضة
                 <span class="arrow">▼</span>
@@ -1846,61 +1944,97 @@
         const FORM_ID = "c1wnaskf0a1";
         const REDIRECT_URL = "https://hivemind.com/thank-you";
 
+        // ===== خريطة أسماء الألوان بالعربية =====
+        const colorNames = {
+            '#000000': 'أسود',
+            '#ffffff': 'أبيض',
+            '#1a5276': 'أزرق داكن',
+            '#e74c3c': 'أحمر',
+            '#2c3e50': 'أزرق قاتم',
+            '#2ecc71': 'أخضر',
+            '#f39c12': 'برتقالي',
+            '#1a1a2e': 'كحلي غامق',
+            '#34495e': 'أزرق رمادي',
+            '#5d4037': 'بني داكن',
+            '#33691e': 'أخضر غامق',
+            '#3e2723': 'بني غامق',
+            '#4a4a4a': 'رمادي غامق',
+            '#8e44ad': 'بنفسجي',
+            '#c0392b': 'أحمر غامق',
+            '#3498db': 'أزرق فاتح'
+        };
+
+        // دالة للحصول على اسم اللون بالعربية
+        function getColorName(hexColor) {
+            // إذا كان اللون غير موجود في الخريطة، نعيد الاسم الإنجليزي أو الكود
+            if (colorNames[hexColor]) {
+                return colorNames[hexColor];
+            }
+            // محاولة تحويل اللون إلى اسم من الخريطة (مطابقة غير حساسة للحالة)
+            const lowerHex = hexColor.toLowerCase();
+            for (const [key, value] of Object.entries(colorNames)) {
+                if (key.toLowerCase() === lowerHex) {
+                    return value;
+                }
+            }
+            return hexColor; // إرجاع الكود إذا لم نجد اسماً
+        }
+
         // ============================================================
-        // بيانات المنتجات
+        // بيانات المنتجات (محدثة مع مقاسات وألوان)
         // ============================================================
         const allProducts = [
             // ===== ملابس =====
-            { id: 1, name: "تيشرت قطني رجالي", price: 250, oldPrice: 350, discount: "29%", category: "ملابس", subcategory: "تيشيرتات", rating: 4.7, reviews: 120, image: "https://g.top4top.io/p_38726i9uw0.jpg", freeShipping: true, description: "تيشرت قطني مريح للغاية، مناسب للاستخدام اليومي." },
-            { id: 2, name: "تيشرت رياضي", price: 200, oldPrice: 280, discount: "28%", category: "ملابس", subcategory: "تيشيرتات", rating: 4.5, reviews: 95, image: "https://i.imgpeek.com/sCYts4cTeWgc", freeShipping: true, description: "تيشرت رياضي خفيف الوزن." },
-            { id: 3, name: "بنطلون جينز رجالي", price: 450, oldPrice: 600, discount: "25%", category: "ملابس", subcategory: "بناطيل", rating: 4.6, reviews: 80, image: "https://i.imgpeek.com/bGy-kKIf0exu", freeShipping: false, description: "بنطلون جينز متين وعصري." },
-            { id: 4, name: "بنطلون كارجو", price: 380, oldPrice: 500, discount: "24%", category: "ملابس", subcategory: "بناطيل", rating: 4.4, reviews: 60, image: "https://i.imgpeek.com/Q9gbPNzoH_j8", freeShipping: true, description: "بنطلون كارجو عملي ومريح." },
-            { id: 5, name: "جاكيت شتوي", price: 750, oldPrice: 1000, discount: "25%", category: "ملابس", subcategory: "جواكت", rating: 4.8, reviews: 150, image: "https://i.imgpeek.com/DfBEC03FcL6u", freeShipping: true, description: "جاكيت شتوي دافئ وأنيق." },
-            { id: 6, name: "جاكيت جينز", price: 550, oldPrice: 750, discount: "27%", category: "ملابس", subcategory: "جواكت", rating: 4.5, reviews: 70, image: "https://i.imgpeek.com/HiEAtj_y1E92", freeShipping: false, description: "جاكيت جينز عصري." },
-            { id: 7, name: "بدلة رجالي كلاسيك", price: 1200, oldPrice: 1600, discount: "25%", category: "ملابس", subcategory: "بدل", rating: 4.9, reviews: 200, image: "https://i.imgur.com/8M7Nq2l.jpg", freeShipping: true, description: "بدلة رجالي كلاسيكية مناسبة للمناسبات." },
-            { id: 8, name: "بدلة رسمية", price: 1500, oldPrice: 2000, discount: "25%", category: "ملابس", subcategory: "بدل", rating: 4.7, reviews: 130, image: "https://i.imgur.com/4GvH3Wq.jpg", freeShipping: true, description: "بدلة رسمية أنيقة." },
-            { id: 9, name: "فستان سهرة أنيق", price: 850, oldPrice: 1200, discount: "29%", category: "ملابس", subcategory: "ملابس حريمي", rating: 4.9, reviews: 85, image: "https://i.imgur.com/3WmQ7Tp.jpg", freeShipping: true, description: "فستان سهرة بتصميم أنيق وجذاب." },
-            { id: 10, name: "حذاء رياضي رجالي", price: 650, oldPrice: 900, discount: "28%", category: "ملابس", subcategory: "أحذية", rating: 4.6, reviews: 200, image: "https://i.imgur.com/2FpQ8Rj.jpg", freeShipping: false, description: "حذاء رياضي مريح ومناسب للجري والمشي." },
-            { id: 11, name: "ساعة يد رجالية", price: 1200, oldPrice: 1600, discount: "25%", category: "ملابس", subcategory: "إكسسوارات", rating: 4.8, reviews: 150, image: "https://i.imgur.com/5HpQ8Jk.jpg", freeShipping: true, description: "ساعة يد أنيقة بتصميم عصري." },
+            { id: 1, name: "تيشرت قطني رجالي", price: 250, oldPrice: 350, discount: "29%", category: "ملابس", subcategory: "تيشيرتات", rating: 4.7, reviews: 120, image: "https://g.top4top.io/p_38726i9uw0.jpg", freeShipping: true, description: "تيشرت قطني مريح للغاية، مناسب للاستخدام اليومي.", sizes: ["S", "M", "L", "XL", "XXL"], colors: ["#000000", "#ffffff", "#1a5276", "#e74c3c"] },
+            { id: 2, name: "تيشرت رياضي", price: 200, oldPrice: 280, discount: "28%", category: "ملابس", subcategory: "تيشيرتات", rating: 4.5, reviews: 95, image: "https://i.imgpeek.com/sCYts4cTeWgc", freeShipping: true, description: "تيشرت رياضي خفيف الوزن.", sizes: ["S", "M", "L", "XL"], colors: ["#2c3e50", "#e74c3c", "#2ecc71", "#f39c12"] },
+            { id: 3, name: "بنطلون جينز رجالي", price: 450, oldPrice: 600, discount: "25%", category: "ملابس", subcategory: "بناطيل", rating: 4.6, reviews: 80, image: "https://i.imgpeek.com/bGy-kKIf0exu", freeShipping: false, description: "بنطلون جينز متين وعصري.", sizes: ["S", "M", "L", "XL", "XXL"], colors: ["#1a1a2e", "#2c3e50", "#34495e"] },
+            { id: 4, name: "بنطلون كارجو", price: 380, oldPrice: 500, discount: "24%", category: "ملابس", subcategory: "بناطيل", rating: 4.4, reviews: 60, image: "https://i.imgpeek.com/Q9gbPNzoH_j8", freeShipping: true, description: "بنطلون كارجو عملي ومريح.", sizes: ["M", "L", "XL", "XXL"], colors: ["#5d4037", "#33691e", "#3e2723"] },
+            { id: 5, name: "جاكيت شتوي", price: 750, oldPrice: 1000, discount: "25%", category: "ملابس", subcategory: "جواكت", rating: 4.8, reviews: 150, image: "https://i.imgpeek.com/DfBEC03FcL6u", freeShipping: true, description: "جاكيت شتوي دافئ وأنيق.", sizes: ["M", "L", "XL", "XXL"], colors: ["#1a1a2e", "#2c3e50", "#4a4a4a"] },
+            { id: 6, name: "جاكيت جينز", price: 550, oldPrice: 750, discount: "27%", category: "ملابس", subcategory: "جواكت", rating: 4.5, reviews: 70, image: "https://i.imgpeek.com/HiEAtj_y1E92", freeShipping: false, description: "جاكيت جينز عصري.", sizes: ["S", "M", "L", "XL"], colors: ["#1a1a2e", "#2c3e50", "#5d4037"] },
+            { id: 7, name: "بدلة رجالي كلاسيك", price: 1200, oldPrice: 1600, discount: "25%", category: "ملابس", subcategory: "بدل", rating: 4.9, reviews: 200, image: "https://i.imgur.com/8M7Nq2l.jpg", freeShipping: true, description: "بدلة رجالي كلاسيكية مناسبة للمناسبات.", sizes: ["M", "L", "XL", "XXL"], colors: ["#1a1a2e", "#2c3e50", "#4a4a4a"] },
+            { id: 8, name: "بدلة رسمية", price: 1500, oldPrice: 2000, discount: "25%", category: "ملابس", subcategory: "بدل", rating: 4.7, reviews: 130, image: "https://i.imgur.com/4GvH3Wq.jpg", freeShipping: true, description: "بدلة رسمية أنيقة.", sizes: ["M", "L", "XL"], colors: ["#1a1a2e", "#2c3e50"] },
+            { id: 9, name: "فستان سهرة أنيق", price: 850, oldPrice: 1200, discount: "29%", category: "ملابس", subcategory: "ملابس حريمي", rating: 4.9, reviews: 85, image: "https://i.imgur.com/3WmQ7Tp.jpg", freeShipping: true, description: "فستان سهرة بتصميم أنيق وجذاب.", sizes: ["S", "M", "L", "XL"], colors: ["#e74c3c", "#2c3e50", "#8e44ad", "#f39c12"] },
+            { id: 10, name: "حذاء رياضي رجالي", price: 650, oldPrice: 900, discount: "28%", category: "ملابس", subcategory: "أحذية", rating: 4.6, reviews: 200, image: "https://i.imgur.com/2FpQ8Rj.jpg", freeShipping: false, description: "حذاء رياضي مريح ومناسب للجري والمشي.", sizes: ["40", "41", "42", "43", "44", "45"], colors: ["#1a1a2e", "#2c3e50", "#c0392b"] },
+            { id: 11, name: "ساعة يد رجالية", price: 1200, oldPrice: 1600, discount: "25%", category: "ملابس", subcategory: "إكسسوارات", rating: 4.8, reviews: 150, image: "https://i.imgur.com/5HpQ8Jk.jpg", freeShipping: true, description: "ساعة يد أنيقة بتصميم عصري.", sizes: ["متوسط"], colors: ["#1a1a2e", "#2c3e50"] },
 
             // ===== إلكترونيات =====
-            { id: 12, name: "هاتف ذكي 128GB", price: 4500, oldPrice: 5500, discount: "18%", category: "إلكترونيات", subcategory: "هواتف", rating: 4.9, reviews: 300, image: "https://i.imgur.com/9KpQ8Mn.jpg", freeShipping: true, description: "هاتف ذكي بشاشة كبيرة وكاميرا ممتازة." },
-            { id: 13, name: "لابتوب 14 بوصة", price: 12000, oldPrice: 15000, discount: "20%", category: "إلكترونيات", subcategory: "لابتوب", rating: 4.8, reviews: 180, image: "https://i.imgur.com/7YpQ8Mn.jpg", freeShipping: true, description: "لابتوب خفيف وقوي مناسب للعمل والدراسة." },
-            { id: 14, name: "تابلت 10 بوصة", price: 3500, oldPrice: 4500, discount: "22%", category: "إلكترونيات", subcategory: "تابلت", rating: 4.6, reviews: 120, image: "https://i.imgur.com/3GpQ8Rj.jpg", freeShipping: true, description: "تابلت بشاشة عالية الدقة." },
-            { id: 15, name: "شاشة 32 بوصة 4K", price: 6500, oldPrice: 8000, discount: "19%", category: "إلكترونيات", subcategory: "شاشات", rating: 4.7, reviews: 95, image: "https://i.imgur.com/1VpQ8Mn.jpg", freeShipping: false, description: "شاشة 4K بحجم 32 بوصة بتقنية HDR." },
-            { id: 16, name: "سماعة لاسلكية", price: 350, oldPrice: 500, discount: "30%", category: "إلكترونيات", subcategory: "سماعات", rating: 4.5, reviews: 220, image: "https://i.imgur.com/6BvX5Zp.jpg", freeShipping: true, description: "سماعة لاسلكية مع عزل الضوضاء." },
-            { id: 17, name: "طابعة ليزر", price: 2800, oldPrice: 3500, discount: "20%", category: "إلكترونيات", subcategory: "طابعات", rating: 4.7, reviews: 75, image: "https://i.imgur.com/2JpQ8Rj.jpg", freeShipping: true, description: "طابعة ليزر سريعة وعالية الجودة." },
+            { id: 12, name: "هاتف ذكي 128GB", price: 4500, oldPrice: 5500, discount: "18%", category: "إلكترونيات", subcategory: "هواتف", rating: 4.9, reviews: 300, image: "https://i.imgur.com/9KpQ8Mn.jpg", freeShipping: true, description: "هاتف ذكي بشاشة كبيرة وكاميرا ممتازة.", sizes: [], colors: ["#1a1a2e", "#2c3e50", "#e74c3c"] },
+            { id: 13, name: "لابتوب 14 بوصة", price: 12000, oldPrice: 15000, discount: "20%", category: "إلكترونيات", subcategory: "لابتوب", rating: 4.8, reviews: 180, image: "https://i.imgur.com/7YpQ8Mn.jpg", freeShipping: true, description: "لابتوب خفيف وقوي مناسب للعمل والدراسة.", sizes: [], colors: ["#1a1a2e", "#2c3e50"] },
+            { id: 14, name: "تابلت 10 بوصة", price: 3500, oldPrice: 4500, discount: "22%", category: "إلكترونيات", subcategory: "تابلت", rating: 4.6, reviews: 120, image: "https://i.imgur.com/3GpQ8Rj.jpg", freeShipping: true, description: "تابلت بشاشة عالية الدقة.", sizes: [], colors: ["#1a1a2e", "#2c3e50"] },
+            { id: 15, name: "شاشة 32 بوصة 4K", price: 6500, oldPrice: 8000, discount: "19%", category: "إلكترونيات", subcategory: "شاشات", rating: 4.7, reviews: 95, image: "https://i.imgur.com/1VpQ8Mn.jpg", freeShipping: false, description: "شاشة 4K بحجم 32 بوصة بتقنية HDR.", sizes: [], colors: ["#1a1a2e"] },
+            { id: 16, name: "سماعة لاسلكية", price: 350, oldPrice: 500, discount: "30%", category: "إلكترونيات", subcategory: "سماعات", rating: 4.5, reviews: 220, image: "https://i.imgur.com/6BvX5Zp.jpg", freeShipping: true, description: "سماعة لاسلكية مع عزل الضوضاء.", sizes: [], colors: ["#1a1a2e", "#2c3e50", "#e74c3c"] },
+            { id: 17, name: "طابعة ليزر", price: 2800, oldPrice: 3500, discount: "20%", category: "إلكترونيات", subcategory: "طابعات", rating: 4.7, reviews: 75, image: "https://i.imgur.com/2JpQ8Rj.jpg", freeShipping: true, description: "طابعة ليزر سريعة وعالية الجودة.", sizes: [], colors: ["#1a1a2e"] },
 
-            // ===== منزل - يحتوي على الموازين =====
-            { id: 18, name: "ميزان رقمي", price: 350, oldPrice: 500, discount: "30%", category: "منزل", subcategory: "موازين", rating: 4.8, reviews: 156, image: "https://i.imgpeek.com/twVvQc2mPyyn", freeShipping: true, description: "ميزان رقمي عالي الدقة، مثالي لقياس الوزن بدقة وسهولة." },
-            { id: 19, name: "ميزان مطبخ", price: 280, oldPrice: 400, discount: "30%", category: "منزل", subcategory: "موازين", rating: 4.5, reviews: 89, image: "https://i.imgpeek.com/Wc9yilIVuO3-", freeShipping: true, description: "ميزان مطبخ دقيق لوزن المكونات." },
-            { id: 20, name: "ميزان حمام", price: 450, oldPrice: 600, discount: "25%", category: "منزل", subcategory: "موازين", rating: 4.9, reviews: 210, image: "https://i.imgpeek.com/rXBBHnwsJQTs", freeShipping: true, description: "ميزان حمام ذكي يقيس الوزن ونسبة الدهون." },
-            { id: 21, name: "ميزان ذكي", price: 550, oldPrice: 750, discount: "27%", category: "منزل", subcategory: "موازين", rating: 4.7, reviews: 134, image: "https://i.imgpeek.com/60uk1BBcpEfk", freeShipping: true, description: "ميزان ذكي متصل بالهاتف لتحليل الوزن." },
-            { id: 22, name: "ميزان يدوي", price: 180, oldPrice: 250, discount: "28%", category: "منزل", subcategory: "موازين", rating: 4.3, reviews: 67, image: "https://i.imgpeek.com/vB9CiHukXvlB", freeShipping: false, description: "ميزان يدوي صغير محمول." },
-            { id: 23, name: "ميزان صناعي", price: 1200, oldPrice: 1600, discount: "25%", category: "منزل", subcategory: "موازين", rating: 4.9, reviews: 45, image: "https://i.imgpeek.com/pB3IWDi_jyP8", freeShipping: false, description: "ميزان صناعي للاستخدام في المصانع والمستودعات." },
-            { id: 24, name: "ميزان طبي", price: 850, oldPrice: 1100, discount: "23%", category: "منزل", subcategory: "موازين", rating: 4.8, reviews: 98, image: "https://i.imgpeek.com/GrFERblZlUIA", freeShipping: true, description: "ميزان طبي دقيق لقياس الوزن في العيادات." },
-            { id: 25, name: "مجموعة قدور ستانلس", price: 800, oldPrice: 1100, discount: "27%", category: "منزل", subcategory: "مطبخ", rating: 4.6, reviews: 60, image: "https://i.imgur.com/4TpQ8Jk.jpg", freeShipping: true, description: "مجموعة قدور ستانلس ستيل متينة." },
-            { id: 26, name: "كنبة 3 مقاعد", price: 3500, oldPrice: 4500, discount: "22%", category: "منزل", subcategory: "أثاث", rating: 4.7, reviews: 45, image: "https://i.imgur.com/3WmQ7Tp.jpg", freeShipping: false, description: "كنبة مريحة بتصميم عصري." },
-            { id: 27, name: "خلاط كهربائي", price: 450, oldPrice: 600, discount: "25%", category: "منزل", subcategory: "أجهزة منزلية", rating: 4.4, reviews: 130, image: "https://i.imgur.com/5HpQ8Jk.jpg", freeShipping: true, description: "خلاط كهربائي بقوة 600 واط." },
-            { id: 28, name: "إضاءة LED سقف", price: 320, oldPrice: 450, discount: "29%", category: "منزل", subcategory: "إضاءة", rating: 4.5, reviews: 85, image: "https://i.imgur.com/3X7rHnI.jpg", freeShipping: true, description: "إضاءة LED موفرة للطاقة." },
+            // ===== منزل =====
+            { id: 18, name: "ميزان رقمي", price: 350, oldPrice: 500, discount: "30%", category: "منزل", subcategory: "موازين", rating: 4.8, reviews: 156, image: "https://i.imgpeek.com/twVvQc2mPyyn", freeShipping: true, description: "ميزان رقمي عالي الدقة، مثالي لقياس الوزن بدقة وسهولة.", sizes: [], colors: ["#1a1a2e", "#2c3e50"] },
+            { id: 19, name: "ميزان مطبخ", price: 280, oldPrice: 400, discount: "30%", category: "منزل", subcategory: "موازين", rating: 4.5, reviews: 89, image: "https://i.imgpeek.com/Wc9yilIVuO3-", freeShipping: true, description: "ميزان مطبخ دقيق لوزن المكونات.", sizes: [], colors: ["#1a1a2e", "#2c3e50"] },
+            { id: 20, name: "ميزان حمام", price: 450, oldPrice: 600, discount: "25%", category: "منزل", subcategory: "موازين", rating: 4.9, reviews: 210, image: "https://i.imgpeek.com/rXBBHnwsJQTs", freeShipping: true, description: "ميزان حمام ذكي يقيس الوزن ونسبة الدهون.", sizes: [], colors: ["#1a1a2e", "#2c3e50"] },
+            { id: 21, name: "ميزان ذكي", price: 550, oldPrice: 750, discount: "27%", category: "منزل", subcategory: "موازين", rating: 4.7, reviews: 134, image: "https://i.imgpeek.com/60uk1BBcpEfk", freeShipping: true, description: "ميزان ذكي متصل بالهاتف لتحليل الوزن.", sizes: [], colors: ["#1a1a2e", "#2c3e50"] },
+            { id: 22, name: "ميزان يدوي", price: 180, oldPrice: 250, discount: "28%", category: "منزل", subcategory: "موازين", rating: 4.3, reviews: 67, image: "https://i.imgpeek.com/vB9CiHukXvlB", freeShipping: false, description: "ميزان يدوي صغير محمول.", sizes: [], colors: ["#1a1a2e"] },
+            { id: 23, name: "ميزان صناعي", price: 1200, oldPrice: 1600, discount: "25%", category: "منزل", subcategory: "موازين", rating: 4.9, reviews: 45, image: "https://i.imgpeek.com/pB3IWDi_jyP8", freeShipping: false, description: "ميزان صناعي للاستخدام في المصانع والمستودعات.", sizes: [], colors: ["#1a1a2e"] },
+            { id: 24, name: "ميزان طبي", price: 850, oldPrice: 1100, discount: "23%", category: "منزل", subcategory: "موازين", rating: 4.8, reviews: 98, image: "https://i.imgpeek.com/GrFERblZlUIA", freeShipping: true, description: "ميزان طبي دقيق لقياس الوزن في العيادات.", sizes: [], colors: ["#1a1a2e"] },
+            { id: 25, name: "مجموعة قدور ستانلس", price: 800, oldPrice: 1100, discount: "27%", category: "منزل", subcategory: "مطبخ", rating: 4.6, reviews: 60, image: "https://i.imgur.com/4TpQ8Jk.jpg", freeShipping: true, description: "مجموعة قدور ستانلس ستيل متينة.", sizes: [], colors: ["#1a1a2e"] },
+            { id: 26, name: "كنبة 3 مقاعد", price: 3500, oldPrice: 4500, discount: "22%", category: "منزل", subcategory: "أثاث", rating: 4.7, reviews: 45, image: "https://i.imgur.com/3WmQ7Tp.jpg", freeShipping: false, description: "كنبة مريحة بتصميم عصري.", sizes: [], colors: ["#1a1a2e", "#2c3e50", "#8e44ad"] },
+            { id: 27, name: "خلاط كهربائي", price: 450, oldPrice: 600, discount: "25%", category: "منزل", subcategory: "أجهزة منزلية", rating: 4.4, reviews: 130, image: "https://i.imgur.com/5HpQ8Jk.jpg", freeShipping: true, description: "خلاط كهربائي بقوة 600 واط.", sizes: [], colors: ["#1a1a2e", "#2c3e50"] },
+            { id: 28, name: "إضاءة LED سقف", price: 320, oldPrice: 450, discount: "29%", category: "منزل", subcategory: "إضاءة", rating: 4.5, reviews: 85, image: "https://i.imgur.com/3X7rHnI.jpg", freeShipping: true, description: "إضاءة LED موفرة للطاقة.", sizes: [], colors: ["#1a1a2e"] },
 
             // ===== جمال =====
-            { id: 29, name: "عطر فرنسي فاخر", price: 750, oldPrice: 1000, discount: "25%", category: "جمال", subcategory: "عطور", rating: 4.9, reviews: 200, image: "https://i.imgur.com/9KpQ8Mn.jpg", freeShipping: true, description: "عطر فرنسي برائحة مميزة تدوم طويلاً." },
-            { id: 30, name: "مجموعة مكياج", price: 550, oldPrice: 750, discount: "27%", category: "جمال", subcategory: "مكياج", rating: 4.5, reviews: 110, image: "https://i.imgur.com/2JpQ8Rj.jpg", freeShipping: true, description: "مجموعة مكياج كاملة بألوان متنوعة." },
-            { id: 31, name: "كريم عناية بالبشرة", price: 280, oldPrice: 400, discount: "30%", category: "جمال", subcategory: "عناية بشرة", rating: 4.6, reviews: 160, image: "https://i.imgur.com/4TpQ8Jk.jpg", freeShipping: true, description: "كريم مغذي للبشرة يحتوي على فيتامين E." },
-            { id: 32, name: "شامبو عناية بالشعر", price: 180, oldPrice: 250, discount: "28%", category: "جمال", subcategory: "عناية شعر", rating: 4.4, reviews: 95, image: "https://i.imgur.com/7YpQ8Mn.jpg", freeShipping: true, description: "شامبو مغذي للشعر." },
+            { id: 29, name: "عطر فرنسي فاخر", price: 750, oldPrice: 1000, discount: "25%", category: "جمال", subcategory: "عطور", rating: 4.9, reviews: 200, image: "https://i.imgur.com/9KpQ8Mn.jpg", freeShipping: true, description: "عطر فرنسي برائحة مميزة تدوم طويلاً.", sizes: ["100ml", "50ml"], colors: ["#1a1a2e"] },
+            { id: 30, name: "مجموعة مكياج", price: 550, oldPrice: 750, discount: "27%", category: "جمال", subcategory: "مكياج", rating: 4.5, reviews: 110, image: "https://i.imgur.com/2JpQ8Rj.jpg", freeShipping: true, description: "مجموعة مكياج كاملة بألوان متنوعة.", sizes: [], colors: ["#1a1a2e"] },
+            { id: 31, name: "كريم عناية بالبشرة", price: 280, oldPrice: 400, discount: "30%", category: "جمال", subcategory: "عناية بشرة", rating: 4.6, reviews: 160, image: "https://i.imgur.com/4TpQ8Jk.jpg", freeShipping: true, description: "كريم مغذي للبشرة يحتوي على فيتامين E.", sizes: ["50ml", "100ml"], colors: ["#1a1a2e"] },
+            { id: 32, name: "شامبو عناية بالشعر", price: 180, oldPrice: 250, discount: "28%", category: "جمال", subcategory: "عناية شعر", rating: 4.4, reviews: 95, image: "https://i.imgur.com/7YpQ8Mn.jpg", freeShipping: true, description: "شامبو مغذي للشعر.", sizes: ["250ml", "500ml"], colors: ["#1a1a2e"] },
 
             // ===== أطفال =====
-            { id: 33, name: "طقم ملابس أطفال", price: 350, oldPrice: 500, discount: "30%", category: "أطفال", subcategory: "ملابس أطفال", rating: 4.7, reviews: 90, image: "https://i.imgur.com/3GpQ8Rj.jpg", freeShipping: true, description: "طقم ملابس أطفال قطني مريح." },
-            { id: 34, name: "لعبة تعليمية", price: 200, oldPrice: 280, discount: "29%", category: "أطفال", subcategory: "ألعاب", rating: 4.8, reviews: 75, image: "https://i.imgur.com/1VpQ8Mn.jpg", freeShipping: true, description: "لعبة تعليمية لتطوير المهارات." },
-            { id: 35, name: "زجاجة رضاعة", price: 120, oldPrice: 180, discount: "33%", category: "أطفال", subcategory: "مستلزمات رضاعة", rating: 4.5, reviews: 60, image: "https://i.imgur.com/8FpQ8Jk.jpg", freeShipping: true, description: "زجاجة رضاعة آمنة للأطفال." },
-            { id: 36, name: "عربة أطفال", price: 2800, oldPrice: 3500, discount: "20%", category: "أطفال", subcategory: "عربات أطفال", rating: 4.8, reviews: 40, image: "https://i.imgur.com/5QwMp9J.jpg", freeShipping: false, description: "عربة أطفال خفيفة ومريحة." },
+            { id: 33, name: "طقم ملابس أطفال", price: 350, oldPrice: 500, discount: "30%", category: "أطفال", subcategory: "ملابس أطفال", rating: 4.7, reviews: 90, image: "https://i.imgur.com/3GpQ8Rj.jpg", freeShipping: true, description: "طقم ملابس أطفال قطني مريح.", sizes: ["2-3", "3-4", "4-5", "5-6", "6-7"], colors: ["#2ecc71", "#e74c3c", "#3498db", "#f39c12"] },
+            { id: 34, name: "لعبة تعليمية", price: 200, oldPrice: 280, discount: "29%", category: "أطفال", subcategory: "ألعاب", rating: 4.8, reviews: 75, image: "https://i.imgur.com/1VpQ8Mn.jpg", freeShipping: true, description: "لعبة تعليمية لتطوير المهارات.", sizes: [], colors: ["#2ecc71", "#e74c3c", "#3498db", "#f39c12"] },
+            { id: 35, name: "زجاجة رضاعة", price: 120, oldPrice: 180, discount: "33%", category: "أطفال", subcategory: "مستلزمات رضاعة", rating: 4.5, reviews: 60, image: "https://i.imgur.com/8FpQ8Jk.jpg", freeShipping: true, description: "زجاجة رضاعة آمنة للأطفال.", sizes: ["240ml", "340ml"], colors: ["#2ecc71", "#3498db", "#e74c3c"] },
+            { id: 36, name: "عربة أطفال", price: 2800, oldPrice: 3500, discount: "20%", category: "أطفال", subcategory: "عربات أطفال", rating: 4.8, reviews: 40, image: "https://i.imgur.com/5QwMp9J.jpg", freeShipping: false, description: "عربة أطفال خفيفة ومريحة.", sizes: [], colors: ["#1a1a2e", "#2c3e50", "#e74c3c", "#2ecc71"] },
 
             // ===== رياضة =====
-            { id: 37, name: "قميص رياضي", price: 300, oldPrice: 420, discount: "29%", category: "رياضة", subcategory: "ملابس رياضية", rating: 4.5, reviews: 80, image: "https://i.imgur.com/8FpQ8Jk.jpg", freeShipping: true, description: "قميص رياضي خفيف الوزن." },
-            { id: 38, name: "حذاء جري", price: 700, oldPrice: 950, discount: "26%", category: "رياضة", subcategory: "أحذية رياضية", rating: 4.7, reviews: 140, image: "https://i.imgur.com/1VpQ8Mn.jpg", freeShipping: false, description: "حذاء جري مريح ومناسب للرياضة." },
-            { id: 39, name: "دمبل 5 كجم", price: 350, oldPrice: 500, discount: "30%", category: "رياضة", subcategory: "معدات رياضية", rating: 4.6, reviews: 55, image: "https://i.imgur.com/3X7rHnI.jpg", freeShipping: true, description: "دمبل مناسب لتمارين تقوية العضلات." },
-            { id: 40, name: "كرة قدم", price: 280, oldPrice: 400, discount: "30%", category: "رياضة", subcategory: "كرة قدم", rating: 4.7, reviews: 70, image: "https://i.imgur.com/6BvX5Zp.jpg", freeShipping: true, description: "كرة قدم عالية الجودة." },
+            { id: 37, name: "قميص رياضي", price: 300, oldPrice: 420, discount: "29%", category: "رياضة", subcategory: "ملابس رياضية", rating: 4.5, reviews: 80, image: "https://i.imgur.com/8FpQ8Jk.jpg", freeShipping: true, description: "قميص رياضي خفيف الوزن.", sizes: ["S", "M", "L", "XL", "XXL"], colors: ["#2c3e50", "#e74c3c", "#2ecc71", "#f39c12"] },
+            { id: 38, name: "حذاء جري", price: 700, oldPrice: 950, discount: "26%", category: "رياضة", subcategory: "أحذية رياضية", rating: 4.7, reviews: 140, image: "https://i.imgur.com/1VpQ8Mn.jpg", freeShipping: false, description: "حذاء جري مريح ومناسب للرياضة.", sizes: ["40", "41", "42", "43", "44", "45"], colors: ["#1a1a2e", "#2c3e50", "#e74c3c"] },
+            { id: 39, name: "دمبل 5 كجم", price: 350, oldPrice: 500, discount: "30%", category: "رياضة", subcategory: "معدات رياضية", rating: 4.6, reviews: 55, image: "https://i.imgur.com/3X7rHnI.jpg", freeShipping: true, description: "دمبل مناسب لتمارين تقوية العضلات.", sizes: ["5kg", "10kg"], colors: ["#1a1a2e"] },
+            { id: 40, name: "كرة قدم", price: 280, oldPrice: 400, discount: "30%", category: "رياضة", subcategory: "كرة قدم", rating: 4.7, reviews: 70, image: "https://i.imgur.com/6BvX5Zp.jpg", freeShipping: true, description: "كرة قدم عالية الجودة.", sizes: ["4", "5"], colors: ["#1a1a2e", "#2c3e50"] },
         ];
 
         // ============================================================
@@ -1910,6 +2044,10 @@
         let currentCategory = 'all';
         let currentSubcategory = null;
         let currentDetailProductId = null;
+
+        // تخزين المقاسات المختارة لكل منتج
+        let selectedSizes = {};
+        let selectedColors = {};
 
         // ============================================================
         // دوال المصادقة
@@ -2164,7 +2302,7 @@
 
                 products.forEach(product => {
                     const stars = '⭐'.repeat(Math.floor(product.rating)) + (product.rating % 1 >= 0.5 ? '⭐' :
-                    '');
+                        '');
                     const discountBadge = product.discount ?
                         `<span class="discount-badge">${product.discount}</span>` : '';
                     const freeShipping = product.freeShipping ?
@@ -2187,19 +2325,16 @@
                                 </div>
                                 ${freeShipping}
                                 ${primeBadge}
-                                <button class="add-to-cart-btn" onclick="event.stopPropagation(); addToCart(${product.id})">🛒 إضافة إلى العربة</button>
+                                <button class="add-to-cart-btn" onclick="event.stopPropagation(); openProductDetails(${product.id})">🛒 اختيار المقاس</button>
                             </div>
                         </div>`;
                 });
             }, 300);
         }
 
-        // دالة التصفية الرئيسية - تعمل عند الضغط على أي قسم أو فئة فرعية
         function filterProducts(category) {
-            // تحديث الفئة الحالية
             currentCategory = category;
 
-            // تحديث breadcrumb
             const breadcrumb = document.getElementById('categoryBreadcrumb');
             const categoryNames = {
                 'all': 'الكل',
@@ -2209,7 +2344,6 @@
                 'جمال': 'جمال وعناية',
                 'أطفال': 'أطفال',
                 'رياضة': 'رياضة',
-                // الفئات الفرعية
                 'تيشيرتات': 'تيشيرتات',
                 'بناطيل': 'بناطيل',
                 'جواكت': 'جواكت',
@@ -2249,15 +2383,12 @@
             };
             breadcrumb.textContent = categoryNames[category] || category;
 
-            // تحديث الـ select
             const select = document.getElementById('categorySelect');
             if (select) {
-                // إذا كانت الفئة فرعية، نضع القسم الرئيسي في الـ select
                 const mainCategories = ['ملابس', 'إلكترونيات', 'منزل', 'جمال', 'أطفال', 'رياضة'];
                 if (mainCategories.includes(category)) {
                     select.value = category;
                 } else {
-                    // البحث عن القسم الرئيسي للفئة الفرعية
                     const product = allProducts.find(p => p.subcategory === category);
                     if (product) {
                         select.value = product.category;
@@ -2265,19 +2396,15 @@
                 }
             }
 
-            // تحديث شريط التصنيفات - إزالة الكلاس active من الكل
             document.querySelectorAll('.amazon-nav .nav-item').forEach(el => {
                 el.classList.remove('active');
-                // إذا كان القسم الرئيسي مطابقاً
                 if (el.dataset.category === category) {
                     el.classList.add('active');
                 }
             });
 
-            // فلترة المنتجات
             let filtered = allProducts;
             if (category !== 'all') {
-                // البحث في category أو subcategory
                 filtered = filtered.filter(p =>
                     p.category === category ||
                     p.subcategory === category
@@ -2301,7 +2428,6 @@
             const searchInput = document.getElementById('searchInput').value.trim().toLowerCase();
             let filtered = allProducts;
 
-            // إذا كانت الفئة الحالية ليست الكل، نفلتر حسبها
             if (currentCategory !== 'all') {
                 filtered = filtered.filter(p =>
                     p.category === currentCategory ||
@@ -2324,16 +2450,60 @@
             if (sidebar.classList.contains('open')) renderCart();
         }
 
+        // ===== دالة الإضافة إلى السلة مع المقاس =====
+        function addToCartWithSize(productId, size, color) {
+            const product = allProducts.find(p => p.id === productId);
+            if (!product) return;
+
+            const needsSize = product.sizes && product.sizes.length > 0;
+            if (needsSize && !size) {
+                showNotification('⚠️ يرجى اختيار المقاس', 'error');
+                return;
+            }
+
+            // الحصول على اسم اللون بالعربية
+            const colorName = color ? getColorName(color) : 'غير محدد';
+
+            const existingIndex = cart.findIndex(item => item.id === productId && item.selectedSize === size && item.selectedColor === colorName);
+            if (existingIndex !== -1) {
+                cart[existingIndex].quantity++;
+            } else {
+                cart.push({
+                    ...product,
+                    quantity: 1,
+                    selectedSize: size || 'غير محدد',
+                    selectedColor: colorName,
+                    selectedColorHex: color || null // حفظ الكود السداسي للعرض في الواجهة
+                });
+            }
+
+            localStorage.setItem("cart", JSON.stringify(cart));
+            updateCartIconCount();
+            renderCart();
+
+            const sizeDisplay = size && size !== 'غير محدد' ? ` (مقاس: ${size})` : '';
+            const colorDisplay = colorName && colorName !== 'غير محدد' ? ` (لون: ${colorName})` : '';
+            showNotification(`✅ تم إضافة "${product.name}"${sizeDisplay}${colorDisplay} إلى العربة!`, 'success');
+            closeProductDetails();
+        }
+
+        // دالة addToCart القديمة للتوفيق
         function addToCart(id) {
             const product = allProducts.find(p => p.id === id);
             if (!product) return;
+
+            if (product.sizes && product.sizes.length > 0) {
+                openProductDetails(id);
+                return;
+            }
 
             const existingIndex = cart.findIndex(item => item.id === id);
             if (existingIndex !== -1) {
                 cart[existingIndex].quantity++;
             } else {
-                cart.push({ ...product, quantity: 1 });
+                cart.push({ ...product, quantity: 1, selectedSize: 'غير محدد', selectedColor: 'غير محدد' });
             }
+
             localStorage.setItem("cart", JSON.stringify(cart));
             updateCartIconCount();
             renderCart();
@@ -2362,26 +2532,32 @@
             cartItems.innerHTML = "";
             cart.forEach(item => {
                 total += item.price * item.quantity;
+                const sizeDisplay = item.selectedSize && item.selectedSize !== 'غير محدد' ?
+                    ` | 📏 مقاس: ${item.selectedSize}` : '';
+                const colorDisplay = item.selectedColor && item.selectedColor !== 'غير محدد' ?
+                    ` | 🎨 لون: ${item.selectedColor}` : '';
+
                 cartItems.innerHTML += `
                     <div class="cart-item">
                         <img src="${item.image}" alt="${item.name}" onerror="this.src='https://via.placeholder.com/60x60?text=Takamul'">
                         <div class="cart-item-info">
                             <h4>${item.name}</h4>
+                            <div class="cart-item-size">${sizeDisplay} ${colorDisplay}</div>
                             <p class="cart-item-price">${item.price} ج.م</p>
                             <div class="qty-box">
-                                <button onclick="changeQuantity(${item.id}, -1)">−</button>
+                                <button onclick="changeQuantity(${item.id}, -1, '${item.selectedSize || ''}', '${item.selectedColor || ''}')">−</button>
                                 <span>${item.quantity}</span>
-                                <button onclick="changeQuantity(${item.id}, 1)">+</button>
+                                <button onclick="changeQuantity(${item.id}, 1, '${item.selectedSize || ''}', '${item.selectedColor || ''}')">+</button>
                             </div>
                         </div>
-                        <button class="remove-item" onclick="removeFromCart(${item.id})">🗑️</button>
+                        <button class="remove-item" onclick="removeFromCart(${item.id}, '${item.selectedSize || ''}', '${item.selectedColor || ''}')">🗑️</button>
                     </div>`;
             });
             if (cartTotal) cartTotal.innerText = total;
         }
 
-        function changeQuantity(id, change) {
-            const index = cart.findIndex(item => item.id === id);
+        function changeQuantity(id, change, size, color) {
+            const index = cart.findIndex(item => item.id === id && item.selectedSize === size && item.selectedColor === color);
             if (index === -1) return;
             cart[index].quantity += change;
             if (cart[index].quantity <= 0) cart.splice(index, 1);
@@ -2390,8 +2566,10 @@
             renderCart();
         }
 
-        function removeFromCart(id) {
-            cart = cart.filter(item => item.id !== id);
+        function removeFromCart(id, size, color) {
+            const index = cart.findIndex(item => item.id === id && item.selectedSize === size && item.selectedColor === color);
+            if (index === -1) return;
+            cart.splice(index, 1);
             localStorage.setItem("cart", JSON.stringify(cart));
             updateCartIconCount();
             renderCart();
@@ -2436,15 +2614,17 @@
                 const itemTotal = item.price * item.quantity;
                 total += itemTotal;
                 totalItems += item.quantity;
-                msg += `${index + 1}. ${item.name}\n`;
-                msg += `   Qty: ${item.quantity} | Price: ${itemTotal} EGP\n\n`;
+                const sizeInfo = item.selectedSize && item.selectedSize !== 'غير محدد' ? ` (مقاس: ${item.selectedSize})` : '';
+                const colorInfo = item.selectedColor && item.selectedColor !== 'غير محدد' ? ` (لون: ${item.selectedColor})` : '';
+                msg += `${index + 1}. ${item.name}${sizeInfo}${colorInfo}\n`;
+                msg += `   الكمية: ${item.quantity} | السعر: ${itemTotal} ج.م\n\n`;
             });
             msg += '━'.repeat(35) + '\n';
-            msg += `📊 Total Items: ${totalItems} piece(s)\n`;
-            msg += `💰 Total: ${total} EGP\n`;
+            msg += `📊 إجمالي القطع: ${totalItems} قطعة\n`;
+            msg += `💰 الإجمالي: ${total} ج.م\n`;
             msg += '\n' + '━'.repeat(35) + '\n';
-            msg += `📅 Order Date: ${new Date().toLocaleDateString('en-EG')}\n`;
-            msg += `🕐 Order Time: ${new Date().toLocaleTimeString('en-EG')}`;
+            msg += `📅 تاريخ الطلب: ${new Date().toLocaleDateString('ar-EG')}\n`;
+            msg += `🕐 وقت الطلب: ${new Date().toLocaleTimeString('ar-EG')}`;
             textarea.value = msg;
         }
 
@@ -2476,7 +2656,7 @@
         }
 
         // ============================================================
-        // صفحة تفاصيل المنتج
+        // صفحة تفاصيل المنتج (مع مقاسات وألوان)
         // ============================================================
         function openProductDetails(productId) {
             const product = allProducts.find(p => p.id === productId);
@@ -2484,6 +2664,13 @@
             currentDetailProductId = productId;
             const modal = document.getElementById('productDetailsModal');
             const content = document.getElementById('productDetailsContent');
+
+            if (!selectedSizes[productId]) {
+                selectedSizes[productId] = null;
+            }
+            if (!selectedColors[productId]) {
+                selectedColors[productId] = null;
+            }
 
             const similarProducts = allProducts.filter(p => p.id !== product.id && (p.category === product.category || p
                 .subcategory === product.subcategory)).slice(0, 4);
@@ -2509,6 +2696,49 @@
 
             const stars = '⭐'.repeat(Math.floor(product.rating)) + (product.rating % 1 >= 0.5 ? '⭐' : '');
 
+            let sizeOptionsHTML = '';
+            if (product.sizes && product.sizes.length > 0) {
+                sizeOptionsHTML = `
+                    <span class="size-label">📏 اختر المقاس:</span>
+                    <div class="size-selector" id="sizeSelector">
+                        ${product.sizes.map(size => `
+                            <div class="size-option ${selectedSizes[productId] === size ? 'selected' : ''}" 
+                                 onclick="selectSize(${productId}, '${size}')">
+                                ${size}
+                            </div>
+                        `).join('')}
+                    </div>
+                    <div class="size-error" id="sizeError">⚠️ يرجى اختيار المقاس</div>
+                `;
+            }
+
+            let colorOptionsHTML = '';
+            if (product.colors && product.colors.length > 0) {
+                colorOptionsHTML = `
+                    <span class="size-label">🎨 اختر اللون:</span>
+                    <div class="color-selector" id="colorSelector">
+                        ${product.colors.map(color => {
+                            const colorName = getColorName(color);
+                            return `
+                                <div class="color-option ${selectedColors[productId] === color ? 'selected' : ''}" 
+                                     style="background-color: ${color};"
+                                     onclick="selectColor(${productId}, '${color}')"
+                                     title="${colorName}">
+                                    <span class="color-tooltip">${colorName}</span>
+                                </div>
+                            `;
+                        }).join('')}
+                    </div>
+                `;
+            }
+
+            const optionsSection = (sizeOptionsHTML || colorOptionsHTML) ? `
+                <div style="background:#f8fafc;padding:15px;border-radius:10px;margin:10px 0;border:1px solid #e2e8f0;">
+                    ${sizeOptionsHTML}
+                    ${colorOptionsHTML}
+                </div>
+            ` : '';
+
             content.innerHTML = `
                 <div style="display:grid;grid-template-columns:1fr 1fr;gap:25px;">
                     <div>
@@ -2529,11 +2759,12 @@
                             ${product.discount ? `<span style="font-size:14px;color:#059669;font-weight:700;background:rgba(5,150,105,0.1);padding:2px 12px;border-radius:20px;">${product.discount}</span>` : ''}
                         </div>
                         ${product.freeShipping ? `<span style="color:#059669;font-weight:700;font-size:14px;display:block;margin-bottom:8px;">🚚 التوصيل على حسب المحافظه</span>` : ''}
+                        ${optionsSection}
                         <div style="color:#334155;line-height:1.8;margin:10px 0;font-size:15px;">
                             <strong>📝 الوصف:</strong>
                             <p>${product.description || 'منتج مميز من متجر Takamul'}</p>
                         </div>
-                        <button class="add-to-cart-btn" onclick="addToCartFromDetails()" style="width:100%;padding:14px;background:linear-gradient(135deg,#059669,#047857);border:none;color:#fff;border-radius:10px;cursor:pointer;font-weight:700;font-size:17px;transition:0.3s;margin-top:10px;">🛒 إضافة إلى العربة</button>
+                        <button class="add-to-cart-btn" onclick="addToCartWithSizeFromDetails(${product.id})" style="width:100%;padding:14px;background:linear-gradient(135deg,#059669,#047857);border:none;color:#fff;border-radius:10px;cursor:pointer;font-weight:700;font-size:17px;transition:0.3s;margin-top:10px;">🛒 إضافة إلى العربة</button>
                     </div>
                 </div>
                 ${similarHTML}
@@ -2543,29 +2774,81 @@
             document.body.style.overflow = 'hidden';
         }
 
-        function closeProductDetails() {
-            const modal = document.getElementById('productDetailsModal');
-            if (modal) modal.classList.remove('open');
-            document.body.style.overflow = '';
-            currentDetailProductId = null;
+        function selectSize(productId, size) {
+            selectedSizes[productId] = size;
+            const selector = document.getElementById('sizeSelector');
+            if (selector) {
+                selector.querySelectorAll('.size-option').forEach(el => {
+                    el.classList.remove('selected');
+                    if (el.textContent.trim() === size) {
+                        el.classList.add('selected');
+                    }
+                });
+            }
+            const error = document.getElementById('sizeError');
+            if (error) error.classList.remove('show');
         }
 
-        function addToCartFromDetails() {
-            const product = allProducts.find(p => p.id === currentDetailProductId);
+        function selectColor(productId, color) {
+            selectedColors[productId] = color;
+            const selector = document.getElementById('colorSelector');
+            if (selector) {
+                selector.querySelectorAll('.color-option').forEach(el => {
+                    el.classList.remove('selected');
+                    if (el.style.backgroundColor === color || el.style.backgroundColor === color.toLowerCase()) {
+                        el.classList.add('selected');
+                    }
+                });
+            }
+        }
+
+        function addToCartWithSizeFromDetails(productId) {
+            const product = allProducts.find(p => p.id === productId);
             if (!product) return;
 
-            const existingIndex = cart.findIndex(item => item.id === product.id);
+            const needsSize = product.sizes && product.sizes.length > 0;
+            const selectedSize = selectedSizes[productId];
+            const selectedColor = selectedColors[productId];
+
+            if (needsSize && !selectedSize) {
+                const error = document.getElementById('sizeError');
+                if (error) error.classList.add('show');
+                showNotification('⚠️ يرجى اختيار المقاس', 'error');
+                return;
+            }
+
+            // الحصول على اسم اللون بالعربية
+            const colorName = selectedColor ? getColorName(selectedColor) : 'غير محدد';
+            const size = selectedSize || 'غير محدد';
+
+            const existingIndex = cart.findIndex(item => item.id === productId && item.selectedSize === size && item.selectedColor === colorName);
             if (existingIndex !== -1) {
                 cart[existingIndex].quantity++;
             } else {
-                cart.push({ ...product, quantity: 1 });
+                cart.push({
+                    ...product,
+                    quantity: 1,
+                    selectedSize: size,
+                    selectedColor: colorName,
+                    selectedColorHex: selectedColor || null
+                });
             }
 
             localStorage.setItem("cart", JSON.stringify(cart));
             updateCartIconCount();
             renderCart();
-            showNotification(`✅ تم إضافة "${product.name}" إلى العربة!`, 'success');
+
+            const sizeDisplay = size !== 'غير محدد' ? ` (مقاس: ${size})` : '';
+            const colorDisplay = colorName !== 'غير محدد' ? ` (لون: ${colorName})` : '';
+            showNotification(`✅ تم إضافة "${product.name}"${sizeDisplay}${colorDisplay} إلى العربة!`, 'success');
             closeProductDetails();
+        }
+
+        function closeProductDetails() {
+            const modal = document.getElementById('productDetailsModal');
+            if (modal) modal.classList.remove('open');
+            document.body.style.overflow = '';
+            currentDetailProductId = null;
         }
 
         // ============================================================
@@ -2640,7 +2923,9 @@
                     const itemTotal = item.price * item.quantity;
                     total += itemTotal;
                     totalItems += item.quantity;
-                    productsList += `${index + 1}. ${item.name} | الكمية: ${item.quantity} | السعر: ${itemTotal} ج.م\n`;
+                    const sizeInfo = item.selectedSize && item.selectedSize !== 'غير محدد' ? ` (مقاس: ${item.selectedSize})` : '';
+                    const colorInfo = item.selectedColor && item.selectedColor !== 'غير محدد' ? ` (لون: ${item.selectedColor})` : '';
+                    productsList += `${index + 1}. ${item.name}${sizeInfo}${colorInfo} | الكمية: ${item.quantity} | السعر: ${itemTotal} ج.م\n`;
                 });
 
                 sendOrderEmail(fullName, email, phone, address, total, productsList, totalItems)
@@ -2689,7 +2974,7 @@
             });
         });
 
-        console.log('✅ متجر Takamul يعمل مع القوائم المنسدلة!');
+        console.log('✅ متجر Takamul يعمل مع المقاسات والألوان!');
         console.log('📦 عدد المنتجات:', allProducts.length);
     </script>
 </body>
