@@ -86,19 +86,19 @@
         }
 
         .login-box .logo-img {
-            width: 100px;
-            height: 100px;
+            width: 120px;
+            height: 120px;
             object-fit: contain;
-            margin-bottom: 15px;
+            margin-bottom: 20px;
             border-radius: 50%;
             background: #fff;
-            padding: 10px;
+            padding: 15px;
             border: 3px solid #059669;
         }
 
         .login-box h2 {
-            font-size: 32px;
-            margin-bottom: 8px;
+            font-size: 36px;
+            margin-bottom: 10px;
             color: #1a1a2e;
             font-weight: 800;
         }
@@ -109,57 +109,20 @@
 
         .login-box .subtitle {
             color: #64748b;
-            margin-bottom: 25px;
-            font-size: 15px;
-        }
-
-        .login-box input {
-            width: 100%;
-            padding: 16px 22px;
-            margin-bottom: 16px;
-            border-radius: 12px;
-            border: 2px solid #e2e8f0;
-            background: #f8fafc;
-            color: #1a1a2e;
+            margin-bottom: 30px;
             font-size: 16px;
-            outline: none;
-            transition: 0.3s;
-            text-align: right;
         }
 
-        .login-box input:focus {
-            border-color: #059669;
-            background: #ffffff;
-            box-shadow: 0 0 0 4px rgba(5, 150, 105, 0.15);
+        .login-box .welcome-text {
+            color: #1a1a2e;
+            font-size: 18px;
+            margin-bottom: 25px;
+            line-height: 1.8;
         }
 
-        .login-box input::placeholder {
-            color: #94a3b8;
-        }
-
-        .login-btn {
-            width: 100%;
-            padding: 16px;
-            background: linear-gradient(135deg, #059669, #047857);
-            color: #ffffff;
-            border: none;
-            border-radius: 12px;
-            font-weight: bold;
-            font-size: 19px;
-            cursor: pointer;
-            transition: 0.3s;
-            margin-top: 10px;
-        }
-
-        .login-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(5, 150, 105, 0.35);
-        }
-
-        .login-btn:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-            transform: none;
+        .login-box .welcome-text span {
+            color: #059669;
+            font-weight: 700;
         }
 
         .login-error {
@@ -192,163 +155,13 @@
             display: block;
         }
 
-        .forgot-password-link {
-            color: #64748b;
-            font-size: 13px;
-            margin-top: 12px;
-            display: block;
-            text-align: center;
-        }
-
-        .forgot-password-link a {
-            color: #059669;
-            text-decoration: none;
-            transition: 0.3s;
-        }
-
-        .forgot-password-link a:hover {
-            color: #047857;
-            text-decoration: underline;
-        }
-
-        .register-link {
-            color: #64748b;
-            font-size: 14px;
-            margin-top: 15px;
-        }
-
-        .register-link a {
-            color: #059669;
-            text-decoration: none;
-            font-weight: bold;
-            transition: 0.3s;
-        }
-
-        .register-link a:hover {
-            color: #047857;
-            text-decoration: underline;
-        }
-
         /* ===== Google Sign-In Button ===== */
-        .google-signin-wrapper {
-            margin-top: 15px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            flex-direction: column;
-            gap: 8px;
-        }
-
-        .google-signin-wrapper .divider-text {
-            color: #94a3b8;
-            font-size: 13px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            width: 100%;
-        }
-
-        .google-signin-wrapper .divider-text::before,
-        .google-signin-wrapper .divider-text::after {
-            content: '';
-            flex: 1;
-            height: 1px;
-            background: #e2e8f0;
-        }
-
         #g_id_signin {
             display: flex;
             justify-content: center;
             width: 100%;
             min-height: 50px;
-        }
-
-        /* ===== قسم تغيير كلمة المرور ===== */
-        .reset-manual-box {
-            background: #f8fafc;
-            border: 1px solid #e2e8f0;
-            border-radius: 12px;
-            padding: 20px;
-            margin-top: 15px;
-            text-align: right;
-        }
-
-        .reset-manual-box h3 {
-            color: #1a1a2e;
-            font-size: 16px;
-            margin-bottom: 15px;
-            text-align: center;
-        }
-
-        .reset-manual-box input {
-            margin-bottom: 10px;
-            padding: 14px 18px;
-            border-radius: 12px;
-            border: 2px solid #e2e8f0;
-            background: #fff;
-            color: #1a1a2e;
-            font-size: 15px;
-            outline: none;
-            text-align: right;
-            width: 100%;
-        }
-
-        .reset-manual-box input:focus {
-            border-color: #059669;
-            box-shadow: 0 0 0 4px rgba(5, 150, 105, 0.15);
-        }
-
-        .reset-manual-box .small-btn {
-            background: linear-gradient(135deg, #059669, #047857);
-            color: #fff;
-            border: none;
-            padding: 14px;
-            border-radius: 12px;
-            font-weight: bold;
-            cursor: pointer;
-            width: 100%;
-            font-size: 16px;
-            transition: 0.3s;
-        }
-
-        .reset-manual-box .small-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(5, 150, 105, 0.35);
-        }
-
-        .reset-manual-box .small-btn:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-            transform: none;
-        }
-
-        .reset-result {
-            margin-top: 12px;
-            font-size: 14px;
-            padding: 10px;
-            border-radius: 10px;
-            display: none;
-        }
-
-        .reset-result.success {
-            display: block;
-            color: #059669;
-            background: rgba(5, 150, 105, 0.1);
-            border: 1px solid rgba(5, 150, 105, 0.2);
-        }
-
-        .reset-result.error {
-            display: block;
-            color: #dc2626;
-            background: rgba(220, 38, 38, 0.1);
-            border: 1px solid rgba(220, 38, 38, 0.2);
-        }
-
-        .divider {
-            color: #cbd5e1;
-            margin: 15px 0;
-            font-size: 13px;
-            text-align: center;
+            margin: 10px 0;
         }
 
         /* ===== الهيدر ===== */
@@ -989,7 +802,7 @@
             border-right: 4px solid #dc2626;
         }
 
-        /* ===== مودال الخصوصية والدفع ===== */
+        /* ===== مودال ===== */
         .privacy-modal {
             position: fixed;
             inset: 0;
@@ -1063,13 +876,6 @@
             width: 100%;
         }
 
-        .checkout-box label {
-            font-weight: 700;
-            font-size: 14px;
-            color: #1a1a2e;
-            margin-bottom: -10px;
-        }
-
         .checkout-box input {
             padding: 14px 18px;
             border: 2px solid #e2e8f0;
@@ -1086,11 +892,6 @@
             border-color: #059669;
             background: #fff;
             box-shadow: 0 0 0 4px rgba(5, 150, 105, 0.15);
-        }
-
-        .checkout-box input:read-only {
-            background: #f1f5f9;
-            cursor: default;
         }
 
         .order-message-textarea {
@@ -1172,7 +973,7 @@
             }
         }
 
-        /* ===== نموذج Forminit في المودال ===== */
+        /* ===== نموذج Forminit ===== */
         .forminit-contact-section {
             width: 100%;
             padding: 0;
@@ -1263,12 +1064,6 @@
             align-items: start;
         }
 
-        .product-details-images {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-
         .product-details-main-image {
             width: 100%;
             height: 400px;
@@ -1278,8 +1073,6 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            position: relative;
-            cursor: zoom-in;
             border: 1px solid #e2e8f0;
         }
 
@@ -1287,12 +1080,6 @@
             width: 100%;
             height: 100%;
             object-fit: contain;
-            transition: transform 0.3s ease;
-        }
-
-        .product-details-main-image.zoomed img {
-            transform: scale(2);
-            cursor: zoom-out;
         }
 
         .product-details-info {
@@ -1649,11 +1436,11 @@
                 margin: 20px;
             }
             .login-box .logo-img {
-                width: 70px;
-                height: 70px;
+                width: 80px;
+                height: 80px;
             }
             .login-box h2 {
-                font-size: 26px;
+                font-size: 28px;
             }
             footer .footer-content {
                 grid-template-columns: 1fr;
@@ -1760,9 +1547,14 @@
         <div class="login-box">
             <img src="https://g.top4top.io/p_3889jf2jz1.png" alt="Takamul Logo" class="logo-img">
             <h2><span>Takamul</span> Store</h2>
-            <p class="subtitle">🔐 تسجيل الدخول للوصول إلى المتجر</p>
+            <p class="subtitle">🔐 مرحباً بك في متجرنا</p>
+            
+            <div class="welcome-text">
+                📱 <span>تسجيل الدخول</span> عبر حساب Google<br>
+                للاستمتاع بتجربة تسوق مميزة
+            </div>
 
-            <!-- Google Sign-In -->
+            <!-- Google Sign-In Button -->
             <div id="g_id_onload"
                 data-client_id="169228140962-ks9bihdnh7rdhkotulo7stt9hetd3otl.apps.googleusercontent.com"
                 data-context="signin"
@@ -1779,80 +1571,13 @@
                 data-logo_alignment="left">
             </div>
 
-            <div class="divider" style="display:flex; align-items:center; margin:20px 0; color:#94a3b8;">
-                <span style="padding:0 15px; font-size:13px;">أو</span>
-            </div>
-
-            <input type="email" id="loginEmail" placeholder="✉️ البريد الإلكتروني" autocomplete="email">
-            <input type="password" id="loginPassword" placeholder="🔑 كلمة المرور" autocomplete="current-password">
-
-            <button class="login-btn" id="loginBtn" onclick="handleLogin()">🚀 دخول</button>
-
             <div id="loginError" class="login-error"></div>
             <div id="loginSuccess" class="login-success"></div>
 
-            <div class="forgot-password-link">
-                <a href="#" onclick="showResetPassword()">🔑 نسيت كلمة المرور؟</a>
-            </div>
-            <div class="register-link">
-                ليس لديك حساب؟ <a href="#" onclick="showRegister()">سجل الآن</a>
-            </div>
-        </div>
-    </div>
-
-    <!-- ===== شاشة التسجيل ===== -->
-    <div id="registerScreen"
-        style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.92); z-index: 99998; backdrop-filter: blur(12px); justify-content: center; align-items: center;">
-        <div class="login-box">
-            <img src="https://g.top4top.io/p_3889jf2jz1.png" alt="Takamul Logo" class="logo-img">
-            <h2><span>📝</span> إنشاء حساب</h2>
-            <p class="subtitle">سجل الآن للاستمتاع بتجربة التسوق</p>
-
-            <input type="email" id="registerEmail" placeholder="✉️ البريد الإلكتروني" autocomplete="email">
-            <input type="password" id="registerPassword" placeholder="🔑 كلمة المرور (6 أحرف على الأقل)" autocomplete="new-password">
-            <input type="password" id="registerConfirmPassword" placeholder="🔑 تأكيد كلمة المرور" autocomplete="new-password">
-
-            <button class="login-btn" id="registerBtn" onclick="handleRegister()">✨ إنشاء حساب</button>
-
-            <div id="registerError" class="login-error"></div>
-            <div id="registerSuccess" class="login-success"></div>
-
-            <div class="register-link">
-                لديك حساب بالفعل؟ <a href="#" onclick="showLogin()">تسجيل الدخول</a>
-            </div>
-        </div>
-    </div>
-
-    <!-- ===== شاشة إعادة تعيين كلمة المرور ===== -->
-    <div id="resetPasswordScreen"
-        style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.92); z-index: 99998; backdrop-filter: blur(12px); justify-content: center; align-items: center;">
-        <div class="login-box">
-            <img src="https://g.top4top.io/p_3889jf2jz1.png" alt="Takamul Logo" class="logo-img">
-            <h2><span>🔑</span> إعادة تعيين</h2>
-            <p class="subtitle">اختر إحدى الطرق التالية</p>
-
-            <input type="email" id="resetEmail" placeholder="✉️ البريد الإلكتروني" autocomplete="email">
-            <button class="login-btn" id="resetPasswordBtn" onclick="handleResetPassword()" style="margin-top:5px;">📧 إرسال رابط إعادة التعيين</button>
-            <div id="resetError" class="login-error"></div>
-            <div id="resetSuccess" class="login-success"></div>
-
-            <div class="divider">━━━━━━━━━ أو ━━━━━━━━━</div>
-
-            <div class="reset-manual-box">
-                <h3>🔧 تغيير كلمة المرور يدوياً</h3>
-                <p style="color:#666; font-size:13px; text-align:center; margin-bottom:12px;">
-                    📧 سيتم إرسال كلمة المرور الجديدة إلى بريدك
-                </p>
-                <input type="email" id="manualEmail" placeholder="✉️ البريد الإلكتروني" autocomplete="email">
-                <input type="password" id="manualOldPassword" placeholder="🔑 كلمة المرور الحالية" autocomplete="current-password">
-                <input type="password" id="manualNewPassword" placeholder="🔑 كلمة المرور الجديدة (6 أحرف)" autocomplete="new-password">
-                <input type="password" id="manualConfirmPassword" placeholder="🔑 تأكيد كلمة المرور الجديدة" autocomplete="new-password">
-                <button class="small-btn" id="manualResetBtn" onclick="handleManualReset()">🔄 تغيير كلمة المرور وإرسال البريد</button>
-                <div id="manualResetResult" class="reset-result"></div>
-            </div>
-
-            <div class="register-link" style="margin-top: 20px;">
-                تذكرت كلمة المرور؟ <a href="#" onclick="showLogin()">تسجيل الدخول</a>
+            <div style="margin-top: 25px; color: #94a3b8; font-size: 13px;">
+                <a href="#" onclick="showPrivacyPolicy(event)" style="color: #059669; text-decoration: none;">سياسة الخصوصية</a>
+                &nbsp;|&nbsp;
+                <a href="#" onclick="showAboutModal(event)" style="color: #059669; text-decoration: none;">من نحن</a>
             </div>
         </div>
     </div>
@@ -2069,7 +1794,7 @@
     </div>
 
     <!-- ============================================================ -->
-    <!-- كود الجافاسكريبت الرئيسي -->
+    <!-- كود الجافاسكريبت -->
     <!-- ============================================================ -->
     <script>
         // ============================================================
@@ -2108,251 +1833,50 @@
         const forminit = new Forminit();
         const FORM_ID = "c1wnaskf0a1";
         const REDIRECT_URL = "https://hivemind.com/thank-you";
-        console.log('✅ Forminit initialized with FORM_ID:', FORM_ID);
+        console.log('✅ Forminit initialized');
 
         // ============================================================
-        // 4. Google Sign-In - دالة معالجة الاستجابة
+        // 4. Google Sign-In
         // ============================================================
         function handleCredentialResponse(response) {
             console.log("✅ تم استلام رد من Google");
 
             try {
-                // فك تشفير التوكن
                 const payload = JSON.parse(atob(response.credential.split('.')[1]));
                 console.log("👤 بيانات المستخدم:", payload);
 
-                // تسجيل الدخول عبر Firebase
                 const credential = firebase.auth.GoogleAuthProvider.credential(response.credential);
 
                 auth.signInWithCredential(credential)
                     .then((result) => {
                         console.log('✅ تسجيل الدخول ناجح:', result.user);
-                        showNotification('👋 مرحباً بك ' + (result.user.displayName || result.user.email));
-
-                        // إظهار رسالة نجاح
-                        document.getElementById('loginSuccess').textContent = '✅ مرحباً ' + (result.user.displayName || result
-                            .user.email) + '!';
+                        document.getElementById('loginSuccess').textContent = '✅ مرحباً ' + (result.user.displayName || result.user.email) + '!';
                         document.getElementById('loginSuccess').classList.add('show');
-
-                        // إخفاء رسائل الخطأ
                         document.getElementById('loginError').classList.remove('show');
+                        showNotification('👋 مرحباً بك ' + (result.user.displayName || result.user.email));
                     })
                     .catch((error) => {
                         console.error('❌ خطأ Firebase:', error);
-
-                        // رسائل خطأ محددة
                         let errorMessage = '⚠️ فشل تسجيل الدخول عبر Google';
                         if (error.code === 'auth/account-exists-with-different-credential') {
-                            errorMessage = '⚠️ هذا البريد الإلكتروني مسجل بطريقة أخرى. استخدم تسجيل الدخول العادي.';
+                            errorMessage = '⚠️ هذا البريد الإلكتروني مسجل بطريقة أخرى.';
                         } else if (error.code === 'auth/popup-closed-by-user') {
                             errorMessage = '⚠️ تم إغلاق النافذة. حاول مرة أخرى.';
-                        } else if (error.code === 'auth/cancelled-popup-request') {
-                            errorMessage = '⚠️ تم إلغاء الطلب. حاول مرة أخرى.';
                         }
-
                         document.getElementById('loginError').textContent = errorMessage;
                         document.getElementById('loginError').classList.add('show');
                     });
 
             } catch (e) {
-                console.error("❌ خطأ في فك التشفير:", e);
+                console.error("❌ خطأ:", e);
                 document.getElementById('loginError').textContent = '⚠️ حدث خطأ غير متوقع';
                 document.getElementById('loginError').classList.add('show');
             }
         }
 
         // ============================================================
-        // 5. دوال المصادقة
+        // 5. تسجيل الخروج
         // ============================================================
-
-        function handleLogin() {
-            const email = document.getElementById('loginEmail').value.trim();
-            const password = document.getElementById('loginPassword').value.trim();
-            const errorEl = document.getElementById('loginError');
-            const successEl = document.getElementById('loginSuccess');
-            const loginBtn = document.getElementById('loginBtn');
-
-            errorEl.classList.remove('show');
-            successEl.classList.remove('show');
-
-            if (!email || !password) {
-                errorEl.textContent = '⚠️ يرجى إدخال البريد الإلكتروني وكلمة المرور';
-                errorEl.classList.add('show');
-                return;
-            }
-
-            loginBtn.disabled = true;
-            loginBtn.innerHTML = '⏳ جاري تسجيل الدخول...';
-
-            auth.signInWithEmailAndPassword(email, password)
-                .then((userCredential) => {
-                    successEl.textContent = '✅ مرحباً ' + (userCredential.user.displayName || userCredential.user.email) +
-                        '!';
-                    successEl.classList.add('show');
-                    showNotification('👋 مرحباً بك في متجر Takamul');
-                })
-                .catch((error) => {
-                    let errorMessage = '⚠️ البريد الإلكتروني أو كلمة المرور غير صحيحة';
-                    if (error.code === 'auth/user-not-found') errorMessage = '⚠️ لا يوجد حساب بهذا البريد الإلكتروني';
-                    else if (error.code === 'auth/wrong-password') errorMessage = '⚠️ كلمة المرور غير صحيحة';
-                    else if (error.code === 'auth/invalid-email') errorMessage = '⚠️ البريد الإلكتروني غير صحيح';
-                    else if (error.code === 'auth/too-many-requests') errorMessage = '⚠️ تم حظر الحساب مؤقتاً. حاول لاحقاً';
-                    errorEl.textContent = errorMessage;
-                    errorEl.classList.add('show');
-                })
-                .finally(() => {
-                    loginBtn.disabled = false;
-                    loginBtn.innerHTML = '🚀 دخول';
-                });
-        }
-
-        function handleRegister() {
-            const email = document.getElementById('registerEmail').value.trim();
-            const password = document.getElementById('registerPassword').value.trim();
-            const confirmPassword = document.getElementById('registerConfirmPassword').value.trim();
-            const errorEl = document.getElementById('registerError');
-            const successEl = document.getElementById('registerSuccess');
-            const registerBtn = document.getElementById('registerBtn');
-
-            errorEl.classList.remove('show');
-            successEl.classList.remove('show');
-
-            if (!email || !password || !confirmPassword) {
-                errorEl.textContent = '⚠️ يرجى ملء جميع الحقول';
-                errorEl.classList.add('show');
-                return;
-            }
-            if (password.length < 6) {
-                errorEl.textContent = '⚠️ كلمة المرور يجب أن تكون 6 أحرف على الأقل';
-                errorEl.classList.add('show');
-                return;
-            }
-            if (password !== confirmPassword) {
-                errorEl.textContent = '⚠️ كلمة المرور غير متطابقة';
-                errorEl.classList.add('show');
-                return;
-            }
-
-            registerBtn.disabled = true;
-            registerBtn.innerHTML = '⏳ جاري إنشاء الحساب...';
-
-            auth.createUserWithEmailAndPassword(email, password)
-                .then((userCredential) => {
-                    successEl.textContent = '✅ تم إنشاء الحساب بنجاح! جاري تحويلك...';
-                    successEl.classList.add('show');
-                    showNotification('✅ تم إنشاء الحساب بنجاح!');
-                    setTimeout(() => showLogin(), 1500);
-                })
-                .catch((error) => {
-                    let errorMessage = '⚠️ حدث خطأ أثناء إنشاء الحساب';
-                    if (error.code === 'auth/email-already-in-use') errorMessage =
-                    '⚠️ هذا البريد الإلكتروني مستخدم بالفعل';
-                    else if (error.code === 'auth/invalid-email') errorMessage = '⚠️ البريد الإلكتروني غير صحيح';
-                    else if (error.code === 'auth/weak-password') errorMessage =
-                        '⚠️ كلمة المرور ضعيفة. استخدم 6 أحرف على الأقل';
-                    errorEl.textContent = errorMessage;
-                    errorEl.classList.add('show');
-                })
-                .finally(() => {
-                    registerBtn.disabled = false;
-                    registerBtn.innerHTML = '✨ إنشاء حساب';
-                });
-        }
-
-        function handleResetPassword() {
-            const email = document.getElementById('resetEmail').value.trim();
-            const errorEl = document.getElementById('resetError');
-            const successEl = document.getElementById('resetSuccess');
-            const resetBtn = document.getElementById('resetPasswordBtn');
-
-            errorEl.classList.remove('show');
-            successEl.classList.remove('show');
-
-            if (!email) {
-                errorEl.textContent = '⚠️ يرجى إدخال البريد الإلكتروني';
-                errorEl.classList.add('show');
-                return;
-            }
-
-            resetBtn.disabled = true;
-            resetBtn.innerHTML = '⏳ جاري الإرسال...';
-
-            auth.sendPasswordResetEmail(email)
-                .then(() => {
-                    successEl.textContent = '✅ تم إرسال رابط إعادة التعيين إلى بريدك الإلكتروني';
-                    successEl.classList.add('show');
-                    showNotification('📧 تم إرسال الرابط إلى بريدك');
-                })
-                .catch((error) => {
-                    let errorMessage = '⚠️ حدث خطأ أثناء إرسال رابط إعادة التعيين';
-                    if (error.code === 'auth/user-not-found') errorMessage = '⚠️ لا يوجد حساب بهذا البريد الإلكتروني';
-                    else if (error.code === 'auth/invalid-email') errorMessage = '⚠️ البريد الإلكتروني غير صحيح';
-                    errorEl.textContent = errorMessage;
-                    errorEl.classList.add('show');
-                })
-                .finally(() => {
-                    resetBtn.disabled = false;
-                    resetBtn.innerHTML = '📧 إرسال رابط إعادة التعيين';
-                });
-        }
-
-        function handleManualReset() {
-            const email = document.getElementById('manualEmail').value.trim();
-            const oldPassword = document.getElementById('manualOldPassword').value.trim();
-            const newPassword = document.getElementById('manualNewPassword').value.trim();
-            const confirmPassword = document.getElementById('manualConfirmPassword').value.trim();
-            const resultDiv = document.getElementById('manualResetResult');
-            const btn = document.getElementById('manualResetBtn');
-
-            resultDiv.className = 'reset-result';
-            resultDiv.style.display = 'block';
-
-            if (!email || !oldPassword || !newPassword || !confirmPassword) {
-                resultDiv.className = 'reset-result error';
-                resultDiv.textContent = '⚠️ يرجى ملء جميع الحقول';
-                return;
-            }
-            if (newPassword.length < 6) {
-                resultDiv.className = 'reset-result error';
-                resultDiv.textContent = '⚠️ كلمة المرور الجديدة يجب أن تكون 6 أحرف على الأقل';
-                return;
-            }
-            if (newPassword !== confirmPassword) {
-                resultDiv.className = 'reset-result error';
-                resultDiv.textContent = '⚠️ كلمة المرور الجديدة غير متطابقة';
-                return;
-            }
-
-            btn.disabled = true;
-            btn.textContent = '⏳ جاري التغيير...';
-
-            auth.signInWithEmailAndPassword(email, oldPassword)
-                .then((userCredential) => {
-                    return userCredential.user.updatePassword(newPassword);
-                })
-                .then(() => {
-                    resultDiv.className = 'reset-result success';
-                    resultDiv.innerHTML = `✅ تم تغيير كلمة المرور بنجاح!`;
-                    showNotification('✅ تم تغيير كلمة المرور بنجاح!');
-                    setTimeout(() => {
-                        showLogin();
-                        resultDiv.style.display = 'none';
-                    }, 4000);
-                })
-                .catch((error) => {
-                    let errorMessage = '⚠️ فشل تغيير كلمة المرور';
-                    if (error.code === 'auth/wrong-password') errorMessage = '⚠️ كلمة المرور الحالية غير صحيحة';
-                    else if (error.code === 'auth/user-not-found') errorMessage =
-                    '⚠️ لا يوجد حساب بهذا البريد الإلكتروني';
-                    resultDiv.className = 'reset-result error';
-                    resultDiv.textContent = errorMessage;
-                })
-                .finally(() => {
-                    btn.disabled = false;
-                    btn.textContent = '🔄 تغيير كلمة المرور وإرسال البريد';
-                });
-        }
-
         function handleLogout() {
             if (confirm('هل تريد تسجيل الخروج؟')) {
                 auth.signOut()
@@ -2376,54 +1900,24 @@
             if (user) {
                 loginScreen.classList.add('hidden');
                 mainContent.style.display = 'block';
-                if (userEmailDisplay) userEmailDisplay.textContent = user.email || user.displayName || 'مستخدم';
+                if (userEmailDisplay) userEmailDisplay.textContent = user.displayName || user.email || 'مستخدم';
                 displayProducts(allProducts);
                 updateCartIconCount();
-                // إظهار رسالة ترحيب
                 setTimeout(() => {
                     showNotification('👋 مرحباً بك في متجر Takamul');
                 }, 500);
             } else {
                 loginScreen.classList.remove('hidden');
                 mainContent.style.display = 'none';
-                // إعادة ضبط الأزرار
-                const loginBtn = document.getElementById('loginBtn');
-                if (loginBtn) {
-                    loginBtn.disabled = false;
-                    loginBtn.innerHTML = '🚀 دخول';
-                }
-                // إخفاء رسائل الخطأ والنجاح
                 document.getElementById('loginError').classList.remove('show');
                 document.getElementById('loginSuccess').classList.remove('show');
-                // إغلاق السلة إذا كانت مفتوحة
                 if (document.getElementById('cartSidebar')?.classList.contains('open')) toggleCart();
             }
         });
 
         // ============================================================
-        // 7. دوال التنقل بين الشاشات
+        // 7. دوال المودالات
         // ============================================================
-
-        function showRegister() {
-            document.getElementById('loginScreen').style.display = 'none';
-            document.getElementById('registerScreen').style.display = 'flex';
-            document.getElementById('resetPasswordScreen').style.display = 'none';
-        }
-
-        function showLogin() {
-            document.getElementById('registerScreen').style.display = 'none';
-            document.getElementById('resetPasswordScreen').style.display = 'none';
-            document.getElementById('loginScreen').style.display = 'flex';
-            document.getElementById('loginError').classList.remove('show');
-            document.getElementById('loginSuccess').classList.remove('show');
-        }
-
-        function showResetPassword() {
-            document.getElementById('loginScreen').style.display = 'none';
-            document.getElementById('registerScreen').style.display = 'none';
-            document.getElementById('resetPasswordScreen').style.display = 'flex';
-        }
-
         function showAboutModal(e) {
             if (e) e.preventDefault();
             document.getElementById('aboutModal').classList.add('open');
@@ -2433,8 +1927,20 @@
             document.getElementById('aboutModal').classList.remove('open');
         }
 
+        function showPrivacyPolicy(e) {
+            if (e) e.preventDefault();
+            document.getElementById('privacyModal').classList.add('open');
+        }
+
+        function closePrivacyPolicy() {
+            document.getElementById('privacyModal').classList.remove('open');
+        }
+
         document.getElementById('aboutModal')?.addEventListener('click', function(e) {
             if (e.target === this) closeAboutModal();
+        });
+        document.getElementById('privacyModal')?.addEventListener('click', function(e) {
+            if (e.target === this) closePrivacyPolicy();
         });
 
         // ============================================================
@@ -2623,33 +2129,29 @@
         }
 
         // ============================================================
-        // 11. إرسال الطلب عبر Forminit
+        // 11. إرسال الطلب
         // ============================================================
         async function sendOrderViaForminit(formData) {
             try {
-                console.log('📤 إرسال عبر Forminit...');
                 const result = await forminit.submit(FORM_ID, formData, { redirect: REDIRECT_URL });
-                console.log('✅ Forminit response:', result);
                 if (result.error) {
-                    console.error('❌ Forminit error:', result.error);
                     return { success: false, error: result.error };
                 }
                 return { success: true, data: result };
             } catch (error) {
-                console.error('❌ Forminit exception:', error);
                 return { success: false, error: error };
             }
         }
 
         function sendOrderEmail(name, email, phone, location, total, productsList, totalItems) {
-            const message = `🛍️ طلب جديد من متجر Takamul Store!\n\n👤 اسم العميل: ${name}\n📱 رقم الهاتف: ${phone}\n📍 العنوان: ${location}\n✉️ البريد الإلكتروني: ${email}\n\n📦 تفاصيل المنتجات:\n${productsList}\n\n📊 ملخص الطلب:\n• عدد القطع: ${totalItems} قطعة\n• الإجمالي: ${total} ج.م\n\n📅 تاريخ الطلب: ${new Date().toLocaleDateString('ar-EG')}\n🕐 وقت الطلب: ${new Date().toLocaleTimeString('ar-EG')}\n\n---\n📧 تم الإرسال تلقائياً من متجر Takamul Store\n🌐 takamulis26@gmail.com`;
+            const message = `🛍️ طلب جديد من متجر Takamul Store!\n\n👤 اسم العميل: ${name}\n📱 رقم الهاتف: ${phone}\n📍 العنوان: ${location}\n✉️ البريد الإلكتروني: ${email}\n\n📦 تفاصيل المنتجات:\n${productsList}\n\n📊 ملخص الطلب:\n• عدد القطع: ${totalItems} قطعة\n• الإجمالي: ${total} ج.م\n\n📅 تاريخ الطلب: ${new Date().toLocaleDateString('ar-EG')}\n🕐 وقت الطلب: ${new Date().toLocaleTimeString('ar-EG')}\n\n---\n📧 تم الإرسال تلقائياً من متجر Takamul Store`;
 
             const templateParams = {
                 to_email: STORE_EMAIL,
                 from_name: name,
                 from_email: email,
                 message: message,
-                subject: "🛍️ طلب جديد من متجر Takamul Store",
+                subject: "🛍️ طلب جديد من Takamul Store",
                 phone: phone,
                 location: location,
                 total: total + " ج.م",
@@ -2659,7 +2161,7 @@
             return emailjs.send(SERVICE_ID, TEMPLATE_ID, templateParams);
         }
 
-        function sendOrder() {
+        async function sendOrder() {
             let firstName = document.querySelector('input[name="fi-sender-firstName"]')?.value.trim() || '';
             let lastName = document.querySelector('input[name="fi-sender-lastName"]')?.value.trim() || '';
             const phone = document.querySelector('input[name="fi-sender-phone"]')?.value.trim() || '';
@@ -2670,7 +2172,7 @@
             lastName = cleanName(lastName);
 
             const finalName = `${firstName} ${lastName}`.trim() || 'غير مدخل';
-            const finalPhone = formatPhoneNumber(phone || '');
+            const finalPhone = formatPhoneNumber(phone);
             const finalAddress = address || 'غير مدخل';
             const finalEmail = email || 'غير مدخل';
 
@@ -2699,30 +2201,21 @@
             formData.append('fi-sender-email', finalEmail);
             formData.append('fi-text-message', document.getElementById('orderMessage')?.value || '');
 
-            sendOrderViaForminit(formData)
-                .then((result) => {
-                    if (result.success) {
-                        showNotification('✅ تم إرسال الطلب بنجاح!', 'success');
-                        cart = [];
-                        localStorage.setItem("cart", JSON.stringify(cart));
-                        updateCartIconCount();
-                        renderCart();
-                        setTimeout(() => {
-                            closeCheckoutModal();
-                            document.querySelectorAll('#checkoutModal input, #checkoutModal textarea')
-                                .forEach(el => {
-                                    el.value = '';
-                                });
-                        }, 2000);
-                    } else {
-                        showNotification('❌ فشل إرسال الطلب: ' + (result.error?.message || 'خطأ غير معروف'),
-                        'error');
-                    }
-                })
-                .catch((error) => {
-                    console.error('❌ Error in sendOrder:', error);
-                    showNotification('⚠️ حدث خطأ غير متوقع', 'error');
-                });
+            const result = await sendOrderViaForminit(formData);
+
+            if (result.success) {
+                showNotification('✅ تم إرسال الطلب بنجاح!', 'success');
+                cart = [];
+                localStorage.setItem("cart", JSON.stringify(cart));
+                updateCartIconCount();
+                renderCart();
+                setTimeout(() => {
+                    closeCheckoutModal();
+                    document.querySelectorAll('#checkoutModal input, #checkoutModal textarea').forEach(el => el.value = '');
+                }, 2000);
+            } else {
+                showNotification('❌ فشل إرسال الطلب', 'error');
+            }
 
             let total = 0,
                 totalItems = 0,
@@ -2731,12 +2224,11 @@
                 const itemTotal = item.price * item.quantity;
                 total += itemTotal;
                 totalItems += item.quantity;
-                productsList +=
-                    `${index + 1}. ${item.name} | الكمية: ${item.quantity} | السعر: ${itemTotal} ج.م\n`;
+                productsList += `${index + 1}. ${item.name} | الكمية: ${item.quantity} | السعر: ${itemTotal} ج.م\n`;
             });
 
             sendOrderEmail(finalName, finalEmail, finalPhone, finalAddress, total, productsList, totalItems)
-                .then(() => console.log('✅ EmailJS sent successfully'))
+                .then(() => console.log('✅ EmailJS sent'))
                 .catch((error) => console.error('❌ EmailJS error:', error));
         }
 
@@ -2757,29 +2249,17 @@
                     return;
                 }
                 productsToDisplay.forEach(product => {
-                    const stars = '⭐'.repeat(Math.floor(product.rating)) + (product.rating % 1 >= 0.5 ? '⭐' :
-                        '');
-                    const discountPercent = product.discount ?
-                        `<span class="discount-badge">${product.discount}</span>` : '';
-                    const freeShipping = product.freeShipping ?
-                        `<span class="free-shipping">🚚 توصيل مجاني</span>` : '';
+                    const stars = '⭐'.repeat(Math.floor(product.rating)) + (product.rating % 1 >= 0.5 ? '⭐' : '');
+                    const discountPercent = product.discount ? `<span class="discount-badge">${product.discount}</span>` : '';
+                    const freeShipping = product.freeShipping ? `<span class="free-shipping">🚚 توصيل مجاني</span>` : '';
                     container.innerHTML += `
                         <div class="product-card" onclick="openProductDetails(${product.id})">
-                            <div class="product-image-wrapper">
-                                <img src="${product.image}" alt="${product.name}">
-                            </div>
+                            <div class="product-image-wrapper"><img src="${product.image}" alt="${product.name}"></div>
                             ${discountPercent}
                             <div class="product-info">
                                 <h3>${product.name}</h3>
-                                <div class="rating">
-                                    <span class="stars">${stars}</span>
-                                    <span class="count">(${product.reviews || 0})</span>
-                                </div>
-                                <div class="price-container">
-                                    <span class="current-price">${product.price} ج.م</span>
-                                    ${product.oldPrice ? `<span class="old-price">${product.oldPrice} ج.م</span>` : ''}
-                                    ${product.discount ? `<span class="discount-percent">${product.discount}</span>` : ''}
-                                </div>
+                                <div class="rating"><span class="stars">${stars}</span><span class="count">(${product.reviews || 0})</span></div>
+                                <div class="price-container"><span class="current-price">${product.price} ج.م</span>${product.oldPrice ? `<span class="old-price">${product.oldPrice} ج.م</span>` : ''}${product.discount ? `<span class="discount-percent">${product.discount}</span>` : ''}</div>
                                 ${freeShipping}
                                 <button class="add-to-cart-btn" onclick="event.stopPropagation(); addToCart(${product.id})">🛒 إضافة إلى العربة</button>
                             </div>
@@ -2907,15 +2387,6 @@
             setTimeout(() => notif.classList.remove('show'), 3000);
         }
 
-        function showPrivacyPolicy(e) {
-            if (e) e.preventDefault();
-            document.getElementById('privacyModal').classList.add('open');
-        }
-
-        function closePrivacyPolicy() {
-            document.getElementById('privacyModal').classList.remove('open');
-        }
-
         // ============================================================
         // 13. دوال صفحة تفاصيل المنتج
         // ============================================================
@@ -2925,8 +2396,7 @@
             currentDetailProductId = productId;
             const modal = document.getElementById('productDetailsModal');
             const content = document.getElementById('productDetailsContent');
-            const similarProducts = allProducts.filter(p => p.id !== product.id && p.category === product.category)
-                .slice(0, 4);
+            const similarProducts = allProducts.filter(p => p.id !== product.id && p.category === product.category).slice(0, 4);
             let similarProductsHTML = '';
             if (similarProducts.length > 0) {
                 similarProductsHTML =
@@ -2934,33 +2404,15 @@
             }
             content.innerHTML = `
                 <div class="product-details-grid">
-                    <div class="product-details-images">
-                        <div class="product-details-main-image">
-                            <img src="${product.image}" alt="${product.name}">
-                        </div>
-                    </div>
+                    <div class="product-details-main-image"><img src="${product.image}" alt="${product.name}"></div>
                     <div class="product-details-info">
                         <button class="back-btn" onclick="closeProductDetails()">← العودة إلى المتجر</button>
                         <h1>${product.name}</h1>
-                        <div class="rating-row">
-                            <span class="stars">${'⭐'.repeat(Math.floor(product.rating))}</span>
-                            <span class="reviews">(${product.reviews || 0} تقييم)</span>
-                        </div>
-                        <div class="price-row">
-                            <span class="current">${product.price} ج.م</span>
-                            ${product.oldPrice ? `<span class="old">${product.oldPrice} ج.م</span>` : ''}
-                            ${product.discount ? `<span class="discount">${product.discount}</span>` : ''}
-                        </div>
+                        <div class="rating-row"><span class="stars">${'⭐'.repeat(Math.floor(product.rating))}</span><span class="reviews">(${product.reviews || 0} تقييم)</span></div>
+                        <div class="price-row"><span class="current">${product.price} ج.م</span>${product.oldPrice ? `<span class="old">${product.oldPrice} ج.م</span>` : ''}${product.discount ? `<span class="discount">${product.discount}</span>` : ''}</div>
                         ${product.freeShipping ? `<div class="free-shipping-badge">🚚 توصيل مجاني</div>` : ''}
-                        <div class="description">
-                            <strong>📝 الوصف:</strong>
-                            <p>${product.description}</p>
-                        </div>
-                        <div class="specs">
-                            <span><strong>🏷️ العلامة التجارية:</strong> ${product.brand}</span>
-                            <span><strong>✅ الضمان:</strong> ${product.warranty}</span>
-                            <span><strong>📦 المادة:</strong> ${product.material}</span>
-                        </div>
+                        <div class="description"><strong>📝 الوصف:</strong><p>${product.description}</p></div>
+                        <div class="specs"><span><strong>🏷️ العلامة التجارية:</strong> ${product.brand}</span><span><strong>✅ الضمان:</strong> ${product.warranty}</span><span><strong>📦 المادة:</strong> ${product.material}</span></div>
                         <button class="add-to-cart-btn" onclick="addToCartFromDetails()">🛒 إضافة إلى العربة</button>
                     </div>
                 </div>${similarProductsHTML}`;
@@ -2991,7 +2443,7 @@
         }
 
         // ============================================================
-        // 14. Forminit - نموذج التواصل في المودال
+        // 14. Forminit - نموذج التواصل
         // ============================================================
         const contactForm = document.getElementById('contactForm');
         const contactStatus = document.getElementById('contactStatus');
@@ -3005,26 +2457,13 @@
                 contactSubmitBtn.disabled = true;
                 contactSubmitBtn.textContent = '⏳ جاري الإرسال...';
 
-                const formData = new FormData(contactForm);
-                const { data, error } = await forminit.submit(FORM_ID, formData, { redirect: REDIRECT_URL });
+                await sendOrder();
 
                 contactSubmitBtn.disabled = false;
                 contactSubmitBtn.textContent = '📧 تأكيد وإرسال الطلب';
-
-                if (error) {
-                    contactStatus.textContent = '❌ ' + error.message;
-                    contactStatus.className = 'status-msg error';
-                    showNotification('❌ فشل الإرسال: ' + error.message, 'error');
-                    return;
-                }
-
-                // إرسال الطلب
-                await sendOrder();
-
-                contactStatus.textContent = '✅ تم إرسال رسالتك بنجاح!';
+                contactStatus.textContent = '✅ تم إرسال الطلب بنجاح!';
                 contactStatus.className = 'status-msg success';
                 contactForm.reset();
-                showNotification('✅ تم إرسال رسالتك بنجاح!', 'success');
                 setTimeout(() => {
                     contactStatus.textContent = '';
                     contactStatus.className = 'status-msg';
@@ -3033,7 +2472,7 @@
         }
 
         // ============================================================
-        // 15. ربط الأحداث عند تحميل الصفحة
+        // 15. ربط الأحداث
         // ============================================================
         document.addEventListener('DOMContentLoaded', function() {
             window.addEventListener('scroll', () => {
@@ -3046,9 +2485,6 @@
             });
             document.getElementById('checkoutModal')?.addEventListener('click', function(e) {
                 if (e.target === this) closeCheckoutModal();
-            });
-            document.getElementById('privacyModal')?.addEventListener('click', function(e) {
-                if (e.target === this) closePrivacyPolicy();
             });
         });
     </script>
